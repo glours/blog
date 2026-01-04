@@ -31,6 +31,12 @@ This file documents AI agent interactions and guidelines for this repository.
 blog/
 ├── .github/workflows/   # GitHub Actions workflows
 ├── content/             # Blog posts and pages (Markdown)
+│   ├── posts/           # Blog posts (auto-publish based on date)
+│   ├── archives.md      # Archives page
+│   └── search.md        # Search functionality
+├── content-planning/    # Editorial planning (not published)
+│   ├── compose-tips-ideas.md  # Monthly content calendar
+│   └── social-media-posts.md  # Social media templates
 ├── layouts/             # Custom Hugo templates
 ├── static/              # Static assets
 ├── themes/PaperMod/     # Theme (git submodule)
@@ -52,6 +58,8 @@ blog/
    - Blog posts go in `content/posts/`
    - Use Hugo front matter for metadata
    - Follow existing post structure
+   - Posts auto-publish based on date (no manual intervention needed)
+   - Editorial planning in `content-planning/` (not published)
 
 3. **Configuration**:
    - Main config is `config.yml`
@@ -63,12 +71,62 @@ blog/
    - Privacy-first approach
    - No third-party scripts except for essential functionality
 
+### Blog Post Format
+
+#### Front Matter Template
+```yaml
+---
+title: "Your Post Title"
+date: 2025-01-06T09:00:00+01:00  # Auto-publishes at this time
+draft: false                       # Use false with future dates
+tags: ["docker-compose", "docker", "tips", "category-tag"]
+categories: ["Docker Compose Tips"]
+author: "Guillaume Lours"
+showToc: false                     # Table of contents (usually false for short tips)
+TocOpen: false
+hidemeta: false
+comments: false
+description: "SEO description - what problem does this solve?"
+disableShare: false
+disableHLJS: false                 # Syntax highlighting
+hideSummary: false
+searchHidden: false
+ShowReadingTime: true
+ShowBreadCrumbs: true
+ShowPostNavLinks: true
+ShowWordCount: true
+ShowRssButtonInSectionTermList: false
+UseHugoToc: false
+---
+```
+
+#### Content Structure for Tips
+1. **Hook**: Problem statement or scenario (1-2 sentences)
+2. **The Command/Solution**: Clear example with code
+3. **Real-World Example**: Practical implementation
+4. **Why This Matters**: Business/technical value
+5. **Pro Tip**: Advanced usage or gotcha
+
+#### Writing Style Guidelines
+- **Natural Language**: Write conversationally, like a human developer sharing knowledge
+- **Simple and Direct**: Use short sentences, avoid complex structures
+- **Neutral Tone**: Stay professional and neutral - avoid "I", "my", "we", "our"
+- **No AI Patterns**:
+  - Avoid catchy/clickbait titles
+  - No excessive excitement or superlatives
+  - Skip phrases like "Let's dive in", "game-changer", "revolutionary"
+  - No decorative bullet points (✅, 🎯, etc.) unless requested
+  - Minimal emojis unless specifically asked
+- **Concrete Examples**: Use real numbers and actual scenarios
+- **Practical Focus**: Share what works in production, not theory
+
 ### Common Tasks
 
 #### Creating a New Blog Post
 ```bash
 hugo new posts/post-title.md
 # Or manually create in content/posts/
+# Set date in the future for auto-publishing
 ```
 
 #### Testing Locally
@@ -104,6 +162,8 @@ AI agents can help with:
 - ✅ Docker and deployment troubleshooting
 - ✅ Hugo theme customization
 - ✅ GitHub Actions workflow modifications
+- ✅ Content planning and editorial calendar
+- ✅ Social media post generation
 
 AI agents should NOT:
 - ❌ Add analytics or tracking
@@ -117,6 +177,20 @@ AI agents should NOT:
 **GitHub:** [@glours](https://github.com/glours)
 **Blog:** Compose, Break, Repeat
 
+## Content Planning Structure
+
+### Editorial Calendar (`content-planning/compose-tips-ideas.md`)
+- Monthly planning for Docker Compose tips
+- Categories: Runtime, Build, Configuration, AI/Development Tools
+- Publishing schedule: Monday-Friday, 9am CET
+- One-page format for quick daily reads
+
+### Social Media Templates (`content-planning/social-media-posts.md`)
+- Platform-specific posts (Bluesky & LinkedIn)
+- Bluesky: Concise, developer-focused (< 300 chars)
+- LinkedIn: Professional, detailed with context
+- Includes hashtag strategy and engagement tips
+
 ## Notes for AI Agents
 
 This project emphasizes:
@@ -125,5 +199,7 @@ This project emphasizes:
 3. **Performance** - Static site generation for speed
 4. **Modern Practices** - Docker Compose Watch, GitHub Actions
 5. **Professional Standards** - As maintained by a Docker Compose maintainer
+6. **Content Strategy** - Daily tips auto-published based on date
+7. **Social Engagement** - Cross-platform content distribution
 
 When making changes, ensure they align with these principles.

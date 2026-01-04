@@ -36,7 +36,7 @@ COPY content content
 # development server with live reload
 FROM build-base AS development
 EXPOSE 1313
-CMD ["hugo", "server", "--bind", "0.0.0.0", "--buildDrafts", "--disableFastRender"]
+CMD ["hugo", "server", "--bind", "0.0.0.0", "--buildDrafts", "--disableFastRender", "--buildFuture"]
 
 # production build
 FROM build-base AS build
