@@ -1,0 +1,51 @@
+services:
+  server:
+    build:
+      context: .
+      target: development
+    ports:
+      - "1313:1313"
+    develop:
+      watch:
+        # Sync all content changes
+        - action: sync
+          path: ./content
+          target: /project/content
+        # Sync config changes (requires rebuild)
+        - action: sync+restart
+          path: ./config.yml
+          target: /project/config.yml
+        # Sync layout changes
+        - action: sync
+          path: ./layouts
+          target: /project/layouts
+        # Sync static files
+        - action: sync
+          path: ./static
+          target: /project/static
+        # Sync assets
+        - action: sync
+          path: ./assets
+          target: /project/assets
+          ignore:
+            - assets/.DS_Store
+
+  # Production build
+  build:
+    build:
+      context: .
+      target: build
+    volumes:
+      - "./public:/project/public"
+    profiles:
+      - build
+
+  # Production preview with nginx
+  preview:
+    build:
+      context: .
+      target: production
+    ports:
+      - "8080:80"
+    profiles:
+      - preview

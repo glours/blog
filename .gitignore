@@ -1,0 +1,36 @@
+# Hugo default output directory
+/public/
+/resources/_gen/
+
+# Hugo build lock file
+.hugo_build.lock
+
+# CNAME file (generated dynamically by GitHub Actions)
+/static/CNAME
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# npm/yarn (if using any Node.js tools)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp

@@ -1,0 +1,11 @@
+public/
+resources/
+.git/
+.github/
+.gitignore
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+.hugo_build.lock
