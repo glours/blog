@@ -64,18 +64,16 @@ jobs:
         run: npm ci
         if: hashFiles('package-lock.json') != ''
 
-      - name: Create CNAME file if custom domain is set
-        if: ${{ secrets.CUSTOM_DOMAIN }}
-        run: echo "${{ secrets.CUSTOM_DOMAIN }}" > static/CNAME
-
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
+          CUSTOM_DOMAIN: ${{ secrets.CUSTOM_DOMAIN }}
         run: |
-          # Use custom domain if set, otherwise use GitHub Pages default
-          if [ -n "${{ secrets.CUSTOM_DOMAIN }}" ]; then
-            BASE_URL="https://${{ secrets.CUSTOM_DOMAIN }}/"
+          # Create CNAME file if custom domain is set
+          if [ -n "$CUSTOM_DOMAIN" ]; then
+            echo "$CUSTOM_DOMAIN" > static/CNAME
+            BASE_URL="https://$CUSTOM_DOMAIN/"
           else
             BASE_URL="${{ steps.pages.outputs.base_url }}/"
           fi
