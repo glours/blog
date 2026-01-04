@@ -1,6 +1,6 @@
 # Social Media Posts for Docker Compose Tips
 
-## Week 1 (Jan 6-10, 2025)
+## Week 1 (Jan 6-10, 2026)
 
 ---
 
@@ -276,7 +276,7 @@ Patterns: lours.me/posts/compose-tip-005-ai-documentation/
 
 ---
 
-## Week 2 (Jan 13-17, 2025) - Advanced Networking
+## Week 2 (Jan 13-17, 2026) - Advanced Networking
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Docker Compose Tip #3: Service dependencies with health checks"
-date: 2025-01-08T09:00:00+01:00
+date: 2026-01-08T09:00:00+01:00
 draft: false
 tags: ["docker-compose", "docker", "tips", "runtime", "intermediate"]
 categories: ["Docker Compose Tips"]

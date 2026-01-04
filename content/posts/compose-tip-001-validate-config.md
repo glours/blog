@@ -1,6 +1,6 @@
 ---
 title: "Docker Compose Tip #1: Debug your configuration with config"
-date: 2025-01-06T09:00:00+01:00
+date: 2026-01-06T09:00:00+01:00
 draft: false
 tags: ["docker-compose", "docker", "tips", "configuration", "beginner"]
 categories: ["Docker Compose Tips"]

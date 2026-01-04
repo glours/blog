@@ -7,7 +7,7 @@
 
 ---
 
-## Month 1 - January 2025
+## Month 1 - January 2026
 
 ### Week 1 (Jan 6-10) - Getting Started Right
 - **Mon**: Using `docker compose config` to validate and view resolved configuration
