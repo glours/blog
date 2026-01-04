@@ -61,7 +61,10 @@ params:
   profileMode:
     enabled: false # needs to be explicitly set
     title: Compose, Break, Repeat
-    subtitle: "Exploring the iterative world of software engineering, Docker, and the art of building things that sometimes break."
+    subtitle: |
+      I'm Guillaume Lours, Docker Compose maintainer, passionate about containerization and developer tools.
+      
+      Exploring the iterative world of software engineering, Docker, and the art of building things that sometimes break.
     imageUrl: "/profile.png"
     imageWidth: 120
     imageHeight: 120
@@ -75,7 +78,11 @@ params:
   # home-info mode
   homeInfoParams:
     Title: "Compose, Break, Repeat"
-    Content: "Exploring the iterative world of software engineering, Docker, and the art of building things that sometimes break."
+    Content: |
+      Welcome! I'm Guillaume Lours, Docker Compose maintainer, passionate about containerization and developer tools.  
+      I'm currently Software engineer at Docker working on Compose and Docker Sandboxes.  
+  
+      Exploring the iterative world of software engineering, Docker, and the art of building things that sometimes break.
 
   socialIcons:
     - name: github
