@@ -1,0 +1,16 @@
+{{- /* Generate optimized favicons using Hugo's image processing */}}
+{{- $profileImg := resources.Get "images/profile.png" -}}
+{{- if $profileImg -}}
+  {{- /* Generate different sizes using Hugo's image processing */}}
+  {{- $favicon16 := $profileImg.Resize "16x16" -}}
+  {{- $favicon32 := $profileImg.Resize "32x32" -}}
+  {{- $favicon180 := $profileImg.Resize "180x180" -}}
+
+  {{- /* Override theme's favicon links with optimized versions */}}
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ $favicon16.RelPermalink }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ $favicon32.RelPermalink }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ $favicon180.RelPermalink }}">
+{{- else -}}
+  {{- /* Fallback to favicon.ico if image not in assets */}}
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
+{{- end -}}

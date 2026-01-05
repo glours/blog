@@ -46,16 +46,17 @@ params:
   assets:
     # disableHLJS: true # to disable highlight.js
     # disableFingerprinting: true
-    favicon: "/profile.png"
-    favicon16x16: "/profile.png"
-    favicon32x32: "/profile.png"
-    apple_touch_icon: "/profile.png"
+    # Favicons now use inline SVG via extend_head.html - these are kept for theme compatibility
+    favicon: "/favicon.ico"
+    favicon16x16: "/favicon.ico"
+    favicon32x32: "/favicon.ico"
+    apple_touch_icon: "/favicon.ico"
     # safari_pinned_tab: "/safari-pinned-tab.svg"
 
   label:
     text: "Home"
-    icon: /profile.png
-    iconHeight: 35
+    icon: images/profile.png  # Hugo will process this from assets folder
+    iconHeight: 60
 
   # profile-mode
   profileMode:
@@ -65,7 +66,7 @@ params:
       I'm Guillaume Lours, Docker Compose maintainer, passionate about containerization and developer tools.
       
       Exploring the iterative world of software engineering, Docker, and the art of building things that sometimes break.
-    imageUrl: "/profile.png"
+    # imageUrl: "/profile.png"  # Commented to reduce page weight
     imageWidth: 120
     imageHeight: 120
     imageTitle: Guillaume Lours

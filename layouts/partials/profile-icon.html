@@ -1,0 +1,9 @@
+{{- /* Generate optimized profile icon using Hugo's image processing */}}
+{{- $profileImg := resources.Get "images/profile.png" -}}
+{{- if $profileImg -}}
+  {{- $icon := $profileImg.Resize "70x70" -}}
+  <img src="{{ $icon.RelPermalink }}" alt="Profile" height="35" />
+{{- else -}}
+  {{- /* Fallback if image not in assets */}}
+  <img src="/profile.png" alt="Profile" height="35" />
+{{- end -}}
