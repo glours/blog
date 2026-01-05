@@ -1,10 +1,10 @@
 # Social Media Posts for Docker Compose Tips
 
-## Week 1 (Jan 6-10, 2026)
+## Week 1 (Jan 5-9, 2026)
 
 ---
 
-### Monday, Jan 6 - Debug your configuration with config
+### Monday, Jan 5 - Debug your configuration with config
 
 **🦋 Bluesky:**
 ```
@@ -49,7 +49,7 @@ Full post: lours.me/posts/compose-tip-001-validate-config/
 
 ---
 
-### Tuesday, Jan 7 - Using --env-file for different environments
+### Tuesday, Jan 6 - Using --env-file for different environments
 
 **🦋 Bluesky:**
 ```
@@ -93,7 +93,7 @@ Details: lours.me/posts/compose-tip-002-env-files/
 
 ---
 
-### Wednesday, Jan 8 - Service dependencies with health checks
+### Wednesday, Jan 7 - Service dependencies with health checks
 
 **🦋 Bluesky:**
 ```
@@ -137,7 +137,7 @@ Examples and patterns: lours.me/posts/compose-tip-003-depends-on-healthcheck/
 
 ---
 
-### Thursday, Jan 9 - Using SSH keys during build
+### Thursday, Jan 8 - Using SSH keys during build
 
 **🦋 Bluesky:**
 ```
@@ -194,7 +194,7 @@ Full guide: lours.me/posts/compose-tip-004-ssh-build/
 
 ---
 
-### Friday, Jan 10 - Writing Compose files for AI tools
+### Friday, Jan 9 - Writing Compose files for AI tools
 
 **🦋 Bluesky:**
 ```
@@ -276,11 +276,11 @@ Patterns: lours.me/posts/compose-tip-005-ai-documentation/
 
 ---
 
-## Week 2 (Jan 13-17, 2026) - Advanced Networking
+## Week 2 (Jan 12-16, 2026) - Advanced Networking
 
 ---
 
-### Monday, Jan 13 - Service discovery
+### Monday, Jan 12 - Service discovery
 
 **🦋 Bluesky:**
 ```

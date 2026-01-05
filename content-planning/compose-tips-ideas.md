@@ -9,7 +9,7 @@
 
 ## Month 1 - January 2026
 
-### Week 1 (Jan 6-10) - Getting Started Right
+### Week 1 (Jan 5-9) - Getting Started Right
 - **Mon**: Using `docker compose config` to validate and view resolved configuration
 - **Tue**: The power of `--env-file` for managing multiple environments
 - **Wed**: Understanding `depends_on` with health checks for proper startup order

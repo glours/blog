@@ -1,6 +1,6 @@
 ---
 title: "Docker Compose Tip #2: Using --env-file for different environments"
-date: 2026-01-07T09:00:00+01:00
+date: 2026-01-06T09:00:00+01:00
 draft: false
 tags: ["docker-compose", "docker", "tips", "configuration", "intermediate"]
 categories: ["Docker Compose Tips"]

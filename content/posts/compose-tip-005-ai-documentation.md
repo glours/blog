@@ -1,6 +1,6 @@
 ---
 title: "Docker Compose Tip #5: Writing Compose files for AI tools"
-date: 2026-01-10T09:00:00+01:00
+date: 2026-01-09T09:00:00+01:00
 draft: false
 tags: ["docker-compose", "docker", "tips", "ai", "documentation", "beginner"]
 categories: ["Docker Compose Tips"]

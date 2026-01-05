@@ -1,6 +1,6 @@
 ---
 title: "Docker Compose Tip #4: Using SSH keys during build"
-date: 2026-01-09T09:00:00+01:00
+date: 2026-01-08T09:00:00+01:00
 draft: false
 tags: ["docker-compose", "docker", "tips", "build", "security"]
 categories: ["Docker Compose Tips"]
