@@ -1,6 +1,8 @@
 # Social Media Posts for Docker Compose Tips
 
-## Week 1 (Jan 5-9, 2026)
+## Completed Posts ✅
+
+### Week 1 (Jan 5-9, 2026) - DONE
 
 ---
 
@@ -8,7 +10,7 @@
 
 **🦋 Bluesky:**
 ```
-🐳 Docker Compose Tip #1
+🐳 🐙Docker Compose Tip #1
 
 Profiles confusing? Use docker compose config to debug.
 
@@ -23,7 +25,7 @@ Details: lours.me/posts/compose-tip-001-validate-config/
 
 **💼 LinkedIn:**
 ```
-🐳 Docker Compose Tip #1: Debug complex configurations
+🐳 🐙Docker Compose Tip #1: Debug complex configurations
 
 `docker compose config` is the go-to debugging tool for complex setups.
 
@@ -53,7 +55,7 @@ Full post: lours.me/posts/compose-tip-001-validate-config/
 
 **🦋 Bluesky:**
 ```
-🐳 Docker Compose Tip #2
+🐳 🐙Docker Compose Tip #2
 
 Same compose.yml for dev/staging/prod:
 
@@ -69,7 +71,7 @@ More: lours.me/posts/compose-tip-002-env-files/
 
 **💼 LinkedIn:**
 ```
-🐳 Docker Compose Tip #2: Environment files
+🐳 🐙Docker Compose Tip #2: Environment files
 
 One compose.yml, multiple environments. Here's what works:
 
@@ -97,7 +99,7 @@ Details: lours.me/posts/compose-tip-002-env-files/
 
 **🦋 Bluesky:**
 ```
-🐳 Docker Compose Tip #3
+🐳 🐙Docker Compose Tip #3
 
 "Connection refused" at startup? Stop using sleep 10.
 
@@ -114,7 +116,7 @@ Examples: lours.me/posts/compose-tip-003-depends-on-healthcheck/
 
 **💼 LinkedIn:**
 ```
-🐳 Docker Compose Tip #3: Health checks for dependencies
+🐳 🐙Docker Compose Tip #3: Health checks for dependencies
 
 Connection refused errors? Your app starts before the database is ready.
 
@@ -141,7 +143,7 @@ Examples and patterns: lours.me/posts/compose-tip-003-depends-on-healthcheck/
 
 **🦋 Bluesky:**
 ```
-🐳 Docker Compose Tip #4
+🐳 🐙Docker Compose Tip #4
 
 Need private repos during build? Use SSH securely:
 
@@ -161,7 +163,7 @@ Guide: lours.me/posts/compose-tip-004-ssh-build/
 
 **💼 LinkedIn:**
 ```
-🐳 Docker Compose Tip #4: SSH keys in builds
+🐳 🐙Docker Compose Tip #4: SSH keys in builds
 
 Accessing private repositories during Docker builds? Here's the secure way:
 
@@ -198,7 +200,7 @@ Full guide: lours.me/posts/compose-tip-004-ssh-build/
 
 **🦋 Bluesky:**
 ```
-🐳 Docker Compose Tip #5
+🐳 🐙Docker Compose Tip #5
 
 Help AI tools help you. Add comments:
 
@@ -216,7 +218,7 @@ Guide: lours.me/posts/compose-tip-005-ai-documentation/
 
 **💼 LinkedIn:**
 ```
-🐳 Docker Compose Tip #5: Documentation for AI tools
+🐳 🐙Docker Compose Tip #5: Documentation for AI tools
 
 AI assistants work better when they understand your setup.
 
@@ -276,15 +278,15 @@ Patterns: lours.me/posts/compose-tip-005-ai-documentation/
 
 ---
 
-## Week 2 (Jan 12-16, 2026) - Advanced Networking
+## Week 2 (Jan 12-16, 2026) - Mixed Themes
 
 ---
 
-### Monday, Jan 12 - Service discovery
+### Monday, Jan 12 - Service discovery and internal DNS
 
 **🦋 Bluesky:**
 ```
-🐳 Docker Compose Tip #6
+🐳 🐙 Docker Compose Tip #6
 
 No more hardcoded IPs. Services find each other by name:
 
@@ -301,7 +303,7 @@ Details: lours.me/posts/compose-tip-006-service-discovery/
 
 **💼 LinkedIn:**
 ```
-🐳 Docker Compose Tip #6: Service discovery
+🐳 🐙 Docker Compose Tip #6: Service discovery and internal DNS
 
 Stop hardcoding IPs. Compose gives each service a DNS name automatically.
 
@@ -323,246 +325,231 @@ Check it: docker compose exec web nslookup api
 
 More: lours.me/posts/compose-tip-006-service-discovery/
 
-#Docker #DockerCompose #Networking
+#Docker #DockerCompose #Networking #DevOps
 ```
 
 ---
 
-### Tuesday, Jan 14 - Connecting multiple projects
+### Tuesday, Jan 13 - Restarting single services
 
 **🦋 Bluesky:**
 ```
-🐳 Docker Compose Tip #7
+🐳 🐙 Docker Compose Tip #7
 
-Connect separate Compose projects with external networks:
+Need to restart just one service? Keep the rest running:
 
-docker network create shared
-# Then use external: true in your compose files
+docker compose up -d web
 
-Share databases, caches, anything between projects.
+Updates and restarts ONLY the web service. Database stays up, no data loss.
 
-Guide: lours.me/posts/compose-tip-007-external-networks/
+Perfect for code changes without full stack restart!
+
+Guide: lours.me/posts/compose-tip-007-restart-single/
 
 #Docker #DockerCompose
 ```
 
 **💼 LinkedIn:**
 ```
-🐳 Docker Compose Tip #7: External networks
+🐳 🐙 Docker Compose Tip #7: Restart single services without stopping the stack
 
-Need multiple Compose projects to talk to each other?
+Stop doing `docker compose down && docker compose up` for every change!
+
+Restart just what you need:
+```bash
+# Restart only the web service
+docker compose up -d web
+
+# Force recreate with new image
+docker compose up -d --force-recreate api
+
+# Rebuild and restart
+docker compose up -d --build worker
+```
+
+Your database stays running, Redis keeps its cache, queues don't lose messages.
+
+This simple pattern saves hours of waiting for services to reinitialize during development.
+
+Real-world example: Updating API code while keeping PostgreSQL, Redis, and RabbitMQ running. Development time cut by 70%.
+
+Full guide: lours.me/posts/compose-tip-007-restart-single/
+
+#Docker #DockerCompose #DeveloperProductivity #DevOps
+```
+
+---
+
+### Wednesday, Jan 14 - Healthchecks with Docker Hardened Images
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #8
+
+DHI images = max security. But no curl for healthchecks!
+
+Solution: Secure sidecar
+app-health:
+  image: dhi.io/curl:8-debian13-dev
+  network_mode: "service:app"
+
+Shares network namespace → localhost works!
+
+Guide: lours.me/posts/compose-tip-008-dhi-healthcheck/
+
+#Docker #Security
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #8: Healthchecks with Docker Hardened Images
+
+Docker Hardened Images (DHI) maximize security but lack shells and curl. Solution: secure sidecar with shared network namespace.
+
+```yaml
+app:
+  image: dhi.io/node:25-debian13-sfw-ent-dev
+  ports:
+    - "3000:3000"
+
+app-health:
+  image: dhi.io/curl:8-debian13-dev
+  network_mode: "service:app"  # Shares app's network!
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+```
+
+Key insight: `network_mode: "service:app"` lets the sidecar access localhost directly.
+
+Benefits:
+🔒 Both containers use DHI - maximum security
+🎯 Sidecar sees only app's network
+📊 Full observability maintained
+🚀 Pattern works in Kubernetes too
+
+Real impact: Zero shell access in production while keeping healthchecks.
+
+Full guide: lours.me/posts/compose-tip-008-dhi-healthcheck/
+
+#Docker #DockerCompose #Security #DHI #DevSecOps
+```
+
+---
+
+### Thursday, Jan 15 - Publishing Compose applications as OCI artifacts
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #9
+
+Publish Compose apps as OCI artifacts!
+
+docker compose publish myapp:v1
+
+Users run with one command:
+docker compose -f oci://docker.io/myapp:v1 up
+
+No git clone, no README. Just run.
+
+Guide: lours.me/posts/compose-tip-009-oci-artifacts/
+
+#Docker #OCI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #9: Publishing Compose applications as OCI artifacts
+
+Package and distribute entire Compose applications through container registries!
 
 ```bash
-docker network create shared-services
+# Publish your compose.yml as OCI artifact
+docker compose publish mycompany/app:v1.0
+
+# Users run directly from registry
+docker compose -f oci://docker.io/mycompany/app:v1.0 up
 ```
 
-Then in each compose.yml:
-```yaml
-networks:
-  default:
-    external: true
-    name: shared-services
-```
+The compose.yml is stored as an OCI artifact alongside your images.
 
-Now your projects can share databases, caches, whatever you need.
+Key features:
+📦 Compose config stored in registry
+🚀 One command deployment
+🔒 Registry authentication & scanning
+📌 Pin images with --resolve-image-digests
 
-Great for microservices or when you want to keep projects separate but connected.
+Perfect for:
+• Demo applications
+• Internal tool distribution
+• Development environments
+• Customer deployments
 
-Examples: lours.me/posts/compose-tip-007-external-networks/
+Requires Docker Compose 2.34.0+
 
-#Docker #DockerCompose #Microservices
-```
+This transforms app distribution - from complex READMEs to single commands.
 
----
+Complete guide: lours.me/posts/compose-tip-009-oci-artifacts/
 
-### Wednesday, Jan 15 - Port Publishing Strategies
-
-**🦋 Bluesky:**
-```
-🐳 Docker Compose Tip #8: Master port publishing!
-
-Short: "3000:3000"
-Long:
-  - target: 3000      # Container
-    published: 3000   # Host
-    protocol: tcp
-    mode: host        # or ingress
-
-Long syntax = more control! 🎯
-
-Examples: lours.me/posts/compose-tip-008-port-publishing/
-
-#Docker #DockerCompose
-```
-
-**💼 LinkedIn:**
-```
-🐳 Docker Compose Daily Tip #8: Port Publishing - Short vs Long Syntax
-
-Not all port mappings are created equal. The long syntax gives you precise control over how services are exposed.
-
-Short syntax (simple cases):
-```yaml
-ports:
-  - "3000:3000"              # host:container
-  - "127.0.0.1:8080:80"     # IP:host:container
-```
-
-Long syntax (production ready):
-```yaml
-ports:
-  - target: 80          # Container port
-    published: 8080     # Host port
-    host_ip: 127.0.0.1 # Bind to specific interface
-    protocol: tcp       # tcp or udp
-    mode: host         # host or ingress (Swarm)
-```
-
-Why use long syntax?
-🔒 Bind to localhost only (security)
-🎛️ UDP support for specialized protocols
-📊 Explicit protocol documentation
-🌐 Swarm mode compatibility
-
-Pro tip: Use `published: "8000-9000"` for port ranges in development.
-
-Complete guide with security considerations: lours.me/posts/compose-tip-008-port-publishing/
-
-#Docker #DockerCompose #Security #Networking #DevOps #BestPractices
+#Docker #DockerCompose #OCI #CloudNative #DevOps
 ```
 
 ---
 
-### Thursday, Jan 16 - Network Aliases for Service Communication
+### Friday, Jan 16 - Using init: true for proper PID 1 handling
 
 **🦋 Bluesky:**
 ```
-🐳 Docker Compose Tip #9: Network aliases = service flexibility!
+🐳 🐙 Docker Compose Tip #10
 
-db:
-  networks:
-    backend:
-      aliases:
-        - postgres
-        - database
-        - primary-db
+Zombie processes? Signals not working?
 
-Multiple names, one service. Perfect for legacy app migration! 🔄
+services:
+  app:
+    init: true
 
-Learn more: lours.me/posts/compose-tip-009-network-aliases/
+Adds tiny init system (Tini) as PID 1. Handles signals properly, reaps zombies.
 
-#Docker #DockerCompose
+Essential for Node.js, Python apps!
+
+Details: lours.me/posts/compose-tip-010-init-pid1/
+
+#Docker #BestPractices
 ```
 
 **💼 LinkedIn:**
 ```
-🐳 Docker Compose Daily Tip #9: Network Aliases for Flexible Service Discovery
+🐳 🐙 Docker Compose Tip #10: Proper PID 1 handling with init
 
-Need a service accessible by multiple names? Network aliases let one container answer to many hostnames.
+Your app shouldn't run as PID 1 in a container. Here's why and how to fix it:
 
 ```yaml
 services:
-  db:
-    image: postgres:15
-    networks:
-      backend:
-        aliases:
-          - postgres
-          - postgresql
-          - primary-database
-          - legacy-db  # For backward compatibility
-
   app:
-    image: myapp
-    environment:
-      # All these work!
-      DB_URL: postgresql://legacy-db:5432/mydb
+    image: node:20
+    init: true  # Adds Tini as PID 1
+    command: node server.js
 ```
 
-Perfect for:
-🔄 Gradual migrations (old and new service names)
-🏗️ Multi-tenant architectures
-🔧 Protocol compatibility (mysql vs mariadb)
-📚 Documentation-friendly naming
+What it solves:
+🧟 Zombie process reaping
+📡 Proper signal forwarding (SIGTERM, SIGINT)
+🛑 Clean shutdowns
+⚡ Faster container stops
 
-Real scenario: Migrating from MySQL to PostgreSQL? Add aliases for both during transition, allowing gradual service updates.
+Without init:
+• Your app becomes PID 1
+• Must handle UNIX signals properly
+• Must reap zombie processes
+• Many runtimes (Node.js, Python) don't do this well
 
-This pattern has saved countless hours during service migrations in production environments.
+Real impact:
+• Graceful shutdowns in Kubernetes
+• No more 10-second waits on docker stop
+• Zero zombie processes in long-running containers
 
-Full migration strategies: lours.me/posts/compose-tip-009-network-aliases/
+Essential for production, especially with interpreted languages.
 
-#Docker #DockerCompose #Migration #Networking #DevOps #Architecture
-```
+Full explanation: lours.me/posts/compose-tip-010-init-pid1/
 
----
-
-### Friday, Jan 17 - Structuring Compose Files for AI Readability
-
-**🦋 Bluesky:**
-```
-🐳 Docker Compose Tip #10: Structure for AI tools! 🤖
-
-Group related services, use consistent naming:
-
-# Frontend Services
-web:
-api:
-
-# Data Layer
-db:
-cache:
-
-AI understands context → better suggestions!
-
-Template: lours.me/posts/compose-tip-010-ai-structure/
-
-#Docker #AI #DevTools
-```
-
-**💼 LinkedIn:**
-```
-🐳 Docker Compose Daily Tip #10: Structuring Compose Files for AI Assistance
-
-AI coding assistants are more effective when they understand your architecture. Here's how to structure Compose files for maximum AI comprehension.
-
-Organizational patterns that work:
-```yaml
-# === Frontend Services ===
-web:
-  image: nginx:alpine
-  # Serves React SPA, proxies to API
-
-api:
-  image: node:20
-  # REST API, handles business logic
-
-# === Data Layer ===
-postgres:
-  image: postgres:15
-  # Primary datastore for user data
-
-redis:
-  image: redis:7
-  # Session store and cache
-
-# === Supporting Services ===
-mailhog:
-  image: mailhog/mailhog
-  # Development email testing
-```
-
-AI tools can then:
-🎯 Understand service relationships
-🔧 Generate appropriate health checks
-🚀 Suggest performance improvements
-🔒 Identify security considerations
-📝 Create accurate documentation
-
-Clear structure = better AI suggestions = faster development.
-
-When working with GitHub Copilot or Claude, this organization pattern consistently produces more relevant and accurate suggestions.
-
-Complete AI collaboration guide: lours.me/posts/compose-tip-010-ai-structure/
-
-#Docker #DockerCompose #AI #CodingAssistants #DeveloperProductivity #BestPractices
+#Docker #DockerCompose #ProcessManagement #BestPractices #Production
 ```

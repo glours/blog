@@ -7,35 +7,37 @@
 
 ---
 
-## Month 1 - January 2026
+## Completed Content
 
-### Week 1 (Jan 5-9) - Getting Started Right
+### Week 1 (Jan 5-9) - DONE ✅
 - **Mon**: Using `docker compose config` to validate and view resolved configuration
 - **Tue**: The power of `--env-file` for managing multiple environments
 - **Wed**: Understanding `depends_on` with health checks for proper startup order
 - **Thu**: Using SSH keys securely during builds for private repositories
 - **Fri**: AI Tip: Using inline comments for better AI assistance with Compose files
 
-### Week 2 (Jan 13-17) - Advanced Networking
-- **Mon**: Service discovery and internal DNS in Compose networks
-- **Tue**: Using external networks to connect multiple Compose projects
-- **Wed**: Port publishing strategies: short vs long syntax
-- **Thu**: Network aliases for service communication
-- **Fri**: AI Tip: Structuring compose files for AI readability
+## Month 1 - January 2026
 
-### Week 3 (Jan 20-24) - Development Workflow
-- **Mon**: Mastering `docker compose watch` for hot reload development
-- **Tue**: Using `develop` section for enhanced dev experience
-- **Wed**: Bind mounts vs volumes: when to use each
-- **Thu**: Override files for local development (`compose.override.yml`)
-- **Fri**: AI Tip: Generating Compose files from Dockerfiles with AI
+### Week 2 (Jan 12-16) - Mixed Themes - READY ✅
+- **Mon**: Service discovery and internal DNS in Compose networks (Networking)
+- **Tue**: Restarting single services with `docker compose up <service>` (Runtime)
+- **Wed**: Healthchecks with Docker Hardened Images using sidecar pattern (Security)
+- **Thu**: Publishing Compose applications as OCI artifacts (Distribution)
+- **Fri**: Using `init: true` for proper PID 1 handling (Runtime)
 
-### Week 4 (Jan 27-31) - Performance & Production
-- **Mon**: Resource limits with `deploy.resources`
-- **Tue**: Using profiles to manage different service combinations
-- **Wed**: Secrets management in Compose
-- **Thu**: Health check best practices
-- **Fri**: AI Tip: Using AI to optimize Compose configurations
+### Week 3 (Jan 20-24) - Mixed Themes
+- **Mon**: Mastering `docker compose watch` for hot reload development (Development)
+- **Tue**: Build cache optimization with `cache_from` and `cache_to` (Build)
+- **Wed**: Using external networks to connect multiple Compose projects (Networking)
+- **Thu**: Running as non-root users in containers (Security)
+- **Fri**: AI Tip: Generating tests from Compose files (AI/Automation)
+
+### Week 4 (Jan 27-31) - Mixed Themes
+- **Mon**: Resource limits with `deploy.resources` (Performance)
+- **Tue**: YAML anchors to reduce duplication (Configuration)
+- **Wed**: Graceful shutdown with `stop_grace_period` (Runtime)
+- **Thu**: Override files for local development (`compose.override.yml`) (Development)
+- **Fri**: AI Tip: Auto-documenting services with AI (AI/Automation)
 
 ---
 
