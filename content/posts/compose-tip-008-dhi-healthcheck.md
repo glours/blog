@@ -51,6 +51,7 @@ services:
 
   app-health:
     image: dhi.io/curl:8-debian13-dev
+    entrypoint: ["sleep", "infinity"]
     network_mode: "service:app"  # Shares app's network namespace!
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
@@ -58,7 +59,6 @@ services:
       timeout: 3s
       retries: 3
       start_period: 10s
-    command: ["sleep", "infinity"]
 ```
 
 The `network_mode: "service:app"` allows the sidecar to access `localhost:3000` directly - they share the same network stack!
@@ -95,7 +95,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 45s
-    command: ["sleep", "infinity"]
+    entrypoint: ["sleep", "infinity"]  # Keep container running
     deploy:
       resources:
         limits:
