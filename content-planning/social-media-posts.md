@@ -553,3 +553,251 @@ Full explanation: lours.me/posts/compose-tip-010-init-pid1/
 
 #Docker #DockerCompose #ProcessManagement #BestPractices #Production
 ```
+
+---
+
+## Week 3 (Jan 19-23, 2026) - Mixed Themes
+
+---
+
+### Monday, Jan 19 - Docker Compose Watch
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #11
+
+Stop manually restarting containers!
+
+docker compose up --watch
+
+Auto-syncs files and reloads services. Configure file watching for instant updates during development.
+
+Read more: lours.me/posts/compose-tip-011-docker-compose-watch/
+
+#Docker #DockerCompose #DevTools
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #11: Mastering docker compose up --watch
+
+Stop the edit-rebuild-restart cycle! Docker Compose Watch automatically syncs your code changes and reloads services. Perfect for frontend hot reloading, backend auto-restart, and config updates.
+
+Configure different actions:
+• sync: Instant file updates
+• rebuild: For dependency changes
+• sync+restart: For config files
+
+Zero-interruption development workflow.
+
+Learn how to configure watch actions for different file types: lours.me/posts/compose-tip-011-docker-compose-watch/
+
+#Docker #DockerCompose #DevTools #DeveloperProductivity
+```
+
+---
+
+### Tuesday, Jan 20 - Target for Build Stages
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #12
+
+One Dockerfile, multiple environments!
+
+Use `target` to build specific stages:
+• Dev stage: 450MB (with tools)
+• Prod stage: 12MB (optimized)
+
+That's 37x smaller! Same Dockerfile.
+
+Details: lours.me/posts/compose-tip-012-target-build-stages/
+
+#Docker #DockerCompose
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #12: Using target to specify build stages
+
+Multi-stage Dockerfiles are powerful, but did you know you can target specific stages in Docker Compose?
+
+```yaml
+services:
+  app-dev:
+    build:
+      target: development  # All debug tools
+
+  app-prod:
+    build:
+      target: production  # Optimized & minimal
+```
+
+Real impact:
+• Development image: 450MB
+• Production image: 12MB
+• Same Dockerfile, 37x size reduction!
+
+Build development images with debugging tools, test stages for CI, and slim production images - all from one Dockerfile.
+
+See how to reduce image sizes dramatically: lours.me/posts/compose-tip-012-target-build-stages/
+
+#Docker #DockerCompose #BuildOptimization #DevOps
+```
+
+---
+
+### Wednesday, Jan 21 - External Networks
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #13
+
+Connect containers across different projects!
+
+Create external networks to share databases, caches, or APIs between multiple Compose stacks.
+
+Perfect for microservices architecture.
+
+Learn how: lours.me/posts/compose-tip-013-external-networks/
+
+#Docker #Microservices
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #13: Using external networks to connect multiple projects
+
+Need your frontend project to communicate with a backend API in another Compose project? External networks are the solution.
+
+```bash
+# Create once
+docker network create shared-network
+```
+
+```yaml
+# Reference in both projects
+networks:
+  shared:
+    external: true
+    name: shared-network
+```
+
+Use cases:
+• Share databases between services
+• Connect microservices
+• Mirror production architecture locally
+• Test service interactions
+
+Services find each other by name across projects - zero configuration needed.
+
+Full guide with examples: lours.me/posts/compose-tip-013-external-networks/
+
+#Docker #DockerCompose #Microservices #Networking #DevOps
+```
+
+---
+
+### Thursday, Jan 22 - Non-root Users
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #14
+
+Stop running containers as root!
+
+services:
+  app:
+    user: "1000:1000"
+
+Simple change, huge security improvement. Defense in depth.
+
+How to do it right: lours.me/posts/compose-tip-014-non-root-users/
+
+#Docker #Security #DevSecOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #14: Running containers as non-root users
+
+Security best practice: Never run containers as root. Here's how to do it right in Docker Compose.
+
+```yaml
+services:
+  app:
+    user: "1000:1000"  # Run as non-root
+
+  # Or use built-in users
+  nginx:
+    user: "nginx"
+```
+
+Key challenges solved:
+• File permission handling
+• Ports below 1024
+• Volume ownership
+• Init containers for permission fixes
+
+Real security benefits:
+🔒 Limited blast radius if compromised
+🛡️ Defense in depth
+✅ Compliance with security standards
+🚫 No root escalation possible
+
+Improve your container security today: lours.me/posts/compose-tip-014-non-root-users/
+
+#Docker #DockerCompose #Security #DevSecOps #BestPractices
+```
+
+---
+
+### Friday, Jan 23 - Blue-Green Deployments with Traefik
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #15
+
+Zero-downtime deployments with Traefik!
+
+Dynamic routing, weighted canary deployments, instant rollback. No bash scripts, just labels and compose commands.
+
+Complete guide: lours.me/posts/compose-tip-015-blue-green-deployments/
+
+#Docker #Traefik #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #15: Blue-green deployments with Traefik
+
+Deploy with confidence using Traefik's dynamic routing! Zero-downtime deployments with automatic health checks and instant rollback.
+
+```yaml
+app-blue:
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.app-blue.priority=1"
+
+app-green:
+  labels:
+    - "traefik.enable=false"  # Start disabled
+    - "traefik.http.routers.app-green.priority=2"
+```
+
+Switch traffic instantly:
+```bash
+docker label set app-green traefik.enable=true
+docker label set app-blue traefik.enable=false
+```
+
+Features:
+• Weighted canary deployments
+• Health-check based routing
+• Real-time monitoring via dashboard
+• No complex scripts needed
+
+Transform your deployment strategy with Docker labels and compose commands: lours.me/posts/compose-tip-015-blue-green-deployments/
+
+#Docker #DockerCompose #Traefik #Deployments #DevOps #ZeroDowntime
+```
