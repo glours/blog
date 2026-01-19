@@ -25,26 +25,25 @@
 - **Thu**: Publishing Compose applications as OCI artifacts (Distribution)
 - **Fri**: Using `init: true` for proper PID 1 handling (Runtime)
 
-### Week 3 (Jan 20-24) - Mixed Themes
-- **Mon**: Mastering `docker compose watch` for hot reload development (Development)
-- **Tue**: Build cache optimization with `cache_from` and `cache_to` (Build)
+### Week 3 (Jan 19-23) - Mixed Themes
+- **Mon**: Mastering `docker compose up --watch` for hot reload development (Development)
+- **Tue**: Using `target` to specify build stages (Build)
 - **Wed**: Using external networks to connect multiple Compose projects (Networking)
 - **Thu**: Running as non-root users in containers (Security)
-- **Fri**: AI Tip: Generating tests from Compose files (AI/Automation)
+- **Fri**: Blue-green deployments with Compose (Advanced Pattern)
 
 ### Week 4 (Jan 27-31) - Mixed Themes
 - **Mon**: Resource limits with `deploy.resources` (Performance)
 - **Tue**: YAML anchors to reduce duplication (Configuration)
 - **Wed**: Graceful shutdown with `stop_grace_period` (Runtime)
 - **Thu**: Override files for local development (`compose.override.yml`) (Development)
-- **Fri**: AI Tip: Auto-documenting services with AI (AI/Automation)
+- **Fri**: Using `docker compose logs` effectively (Debugging)
 
 ---
 
 ## Future Topic Ideas
 
 ### Build Optimization
-- Build cache optimization with `cache_from` and `cache_to`
 - Multi-stage builds in Compose
 - Using `target` to specify build stages
 - Build args vs environment variables

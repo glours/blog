@@ -95,7 +95,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 45s
-    entrypoint: ["sleep", "infinity"]  # Keep container running
+    entrypoint: ["sleep", "infinity"]  
     deploy:
       resources:
         limits:
