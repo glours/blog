@@ -22,7 +22,7 @@ ShowRssButtonInSectionTermList: false
 UseHugoToc: false
 ---
 
-Deploy with zero downtime using Traefik's dynamic routing. Switch traffic between blue and green deployments instantly, with automatic health checks.
+Deploy with zero downtime using Traefik's dynamic routing. Switch traffic between blue and green deployments by updating environment variables, with automatic health checks.
 
 ## The setup
 
@@ -48,7 +48,7 @@ services:
   app-blue:
     image: myapp:${BLUE_VERSION:-v1.0}
     labels:
-      - "traefik.enable=true"
+      - "traefik.enable=${BLUE_ENABLED:-true}"
       - "traefik.http.routers.app-blue.rule=Host(`app.localhost`)"
       - "traefik.http.routers.app-blue.priority=1"
       - "traefik.http.services.app-blue.loadbalancer.server.port=3000"
@@ -60,7 +60,7 @@ services:
   app-green:
     image: myapp:${GREEN_VERSION:-v2.0}
     labels:
-      - "traefik.enable=false"  # Start disabled
+      - "traefik.enable=${GREEN_ENABLED:-false}"  # Start disabled
       - "traefik.http.routers.app-green.rule=Host(`app.localhost`)"
       - "traefik.http.routers.app-green.priority=2"  # Higher priority when enabled
       - "traefik.http.services.app-green.loadbalancer.server.port=3000"
@@ -76,6 +76,8 @@ networks:
 
 ## Deployment workflow
 
+Switch traffic by recreating containers with updated labels:
+
 ```bash
 # 1. Deploy with blue active
 docker compose up -d
@@ -83,11 +85,22 @@ docker compose up -d
 # 2. Update green to new version
 GREEN_VERSION=v2.0 docker compose up -d app-green
 
-# 3. Switch traffic to green
-docker label set app-green traefik.enable=true
-docker label set app-blue traefik.enable=false
+# 3. Switch traffic to green (recreate with new labels)
+BLUE_ENABLED=false GREEN_ENABLED=true docker compose up -d
 
-# Traefik switches instantly - no restart needed!
+# Traefik detects the change and switches routing instantly!
+```
+
+For this to work, update your compose file:
+```yaml
+services:
+  app-blue:
+    labels:
+      - "traefik.enable=${BLUE_ENABLED:-true}"
+
+  app-green:
+    labels:
+      - "traefik.enable=${GREEN_ENABLED:-false}"
 ```
 
 ## Weighted canary deployment
@@ -113,12 +126,21 @@ services:
 Adjust weights to gradually migrate:
 ```bash
 # Shift to 50/50
-docker label set app-blue traefik.http.services.app.loadbalancer.weight=50
-docker label set app-green traefik.http.services.app.loadbalancer.weight=50
+BLUE_WEIGHT=50 GREEN_WEIGHT=50 docker compose up -d
 
 # Full migration to green
-docker label set app-blue traefik.http.services.app.loadbalancer.weight=0
-docker label set app-green traefik.http.services.app.loadbalancer.weight=100
+BLUE_WEIGHT=0 GREEN_WEIGHT=100 docker compose up -d
+```
+
+Update your compose file to use variables:
+```yaml
+services:
+  app-blue:
+    labels:
+      - "traefik.http.services.app.loadbalancer.weight=${BLUE_WEIGHT:-90}"
+  app-green:
+    labels:
+      - "traefik.http.services.app.loadbalancer.weight=${GREEN_WEIGHT:-10}"
 ```
 
 ## Health-check based routing
@@ -144,10 +166,9 @@ services:
 
 ```bash
 # Revert to blue immediately
-docker label set app-blue traefik.enable=true
-docker label set app-green traefik.enable=false
+BLUE_ENABLED=true GREEN_ENABLED=false docker compose up -d
 
-# Traefik switches instantly - no restart needed!
+# Containers recreate quickly and Traefik switches routing!
 ```
 
 ## Pro tip

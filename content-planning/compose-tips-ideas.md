@@ -32,12 +32,42 @@
 - **Thu**: Running as non-root users in containers (Security)
 - **Fri**: Blue-green deployments with Compose (Advanced Pattern)
 
-### Week 4 (Jan 27-31) - Mixed Themes
+### Week 4 (Jan 26-30) - Mixed Themes - READY ✅
 - **Mon**: Resource limits with `deploy.resources` (Performance)
 - **Tue**: YAML anchors to reduce duplication (Configuration)
 - **Wed**: Graceful shutdown with `stop_grace_period` (Runtime)
 - **Thu**: Override files for local development (`compose.override.yml`) (Development)
 - **Fri**: Using `docker compose logs` effectively (Debugging)
+
+## Month 2 - February 2026
+
+### Week 5 (Feb 2-6) - Mixed Themes
+- **Mon**: Understanding bridge vs host networking modes (Networking)
+- **Tue**: Using secrets in Compose files (Security)
+- **Wed**: Multi-platform builds with `platforms` (Build)
+- **Thu**: Using `profiles` to organize optional services (Development)
+- **Fri**: Using `docker compose events` for monitoring (Debugging)
+
+### Week 6 (Feb 9-13) - Mixed Themes
+- **Mon**: Using `restart` policies effectively (Runtime)
+- **Tue**: Port binding best practices and security (Networking/Security)
+- **Wed**: Using `cache_from` and `cache_to` for faster builds (Build)
+- **Thu**: Volume backup strategies (Storage)
+- **Fri**: Compose `include` for modular configurations (Configuration)
+
+### Week 7 (Feb 16-20) - Mixed Themes
+- **Mon**: Network isolation between services (Security)
+- **Tue**: Build contexts and dockerignore patterns (Build)
+- **Wed**: Database migration patterns (Patterns)
+- **Thu**: Debugging with `docker compose exec` vs `run` (Debugging)
+- **Fri**: Using `tmpfs` for ephemeral storage (Performance)
+
+### Week 8 (Feb 23-27) - Mixed Themes
+- **Mon**: Using `extra_hosts` for custom DNS entries (Networking)
+- **Tue**: Health check patterns and debugging (Runtime)
+- **Wed**: Understanding container exit codes (Debugging)
+- **Thu**: Compose in CI/CD pipelines (DevOps)
+- **Fri**: Using labels for service organization and monitoring (Configuration)
 
 ---
 

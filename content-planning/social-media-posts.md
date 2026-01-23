@@ -760,7 +760,10 @@ Improve your container security today: lours.me/posts/compose-tip-014-non-root-u
 
 Zero-downtime deployments with Traefik!
 
-Dynamic routing, weighted canary deployments, instant rollback. No bash scripts, just labels and compose commands.
+Switch traffic using environment variables:
+BLUE_ENABLED=false GREEN_ENABLED=true docker compose up -d
+
+Instant routing changes, weighted canary deployments, automatic health checks.
 
 Complete guide: lours.me/posts/compose-tip-015-blue-green-deployments/
 
@@ -776,28 +779,306 @@ Deploy with confidence using Traefik's dynamic routing! Zero-downtime deployment
 ```yaml
 app-blue:
   labels:
-    - "traefik.enable=true"
+    - "traefik.enable=${BLUE_ENABLED:-true}"
     - "traefik.http.routers.app-blue.priority=1"
 
 app-green:
   labels:
-    - "traefik.enable=false"  # Start disabled
+    - "traefik.enable=${GREEN_ENABLED:-false}"
     - "traefik.http.routers.app-green.priority=2"
 ```
 
 Switch traffic instantly:
 ```bash
-docker label set app-green traefik.enable=true
-docker label set app-blue traefik.enable=false
+# Enable green, disable blue
+BLUE_ENABLED=false GREEN_ENABLED=true docker compose up -d
+
+# Rollback to blue
+BLUE_ENABLED=true GREEN_ENABLED=false docker compose up -d
 ```
 
 Features:
+• Environment variable control
 • Weighted canary deployments
 • Health-check based routing
 • Real-time monitoring via dashboard
-• No complex scripts needed
 
-Transform your deployment strategy with Docker labels and compose commands: lours.me/posts/compose-tip-015-blue-green-deployments/
+Transform your deployment strategy with environment variables and Traefik: lours.me/posts/compose-tip-015-blue-green-deployments/
 
 #Docker #DockerCompose #Traefik #Deployments #DevOps #ZeroDowntime
+```
+
+---
+
+## Week 4: January 26-30, 2026
+
+### Monday, Jan 26 - Resource Limits
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #16
+
+Prevent container resource exhaustion!
+
+Set CPU and memory limits:
+deploy:
+  resources:
+    limits:
+      cpus: '0.5'
+      memory: 512M
+
+Monitor with: docker compose stats
+
+Full guide: lours.me/posts/compose-tip-016-resource-limits/
+
+#Docker #DockerCompose #Performance
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #16: Setting resource limits with deploy.resources
+
+Protect your system from runaway containers! Control CPU and memory consumption to ensure stable multi-service deployments.
+
+```yaml
+deploy:
+  resources:
+    limits:
+      cpus: '2.0'      # 2 CPU cores max
+      memory: 2G       # 2GB memory max
+    reservations:
+      cpus: '1.0'      # Guaranteed minimum
+      memory: 1G
+```
+
+Monitor resource usage:
+• docker compose stats - Real-time monitoring
+• docker compose stats app - Service-specific stats
+• Use environment variables for dev/prod limits
+
+Prevent out-of-memory crashes and CPU throttling before they happen: lours.me/posts/compose-tip-016-resource-limits/
+
+#Docker #DockerCompose #Performance #ResourceManagement #DevOps
+```
+
+---
+
+### Tuesday, Jan 27 - YAML Anchors
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #17
+
+Stop copy-pasting! Use YAML anchors:
+
+x-logging: &default-logging
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+
+services:
+  web:
+    <<: *default-logging
+
+DRY compose configs: lours.me/posts/compose-tip-017-yaml-anchors/
+
+#Docker #YAML #Configuration
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #17: YAML anchors to reduce duplication
+
+Eliminate copy-paste in your Compose files! Define once, reuse everywhere with YAML anchors and aliases.
+
+```yaml
+x-common-variables: &common-variables
+  REDIS_URL: redis://redis:6379
+  POSTGRES_HOST: postgres
+  LOG_LEVEL: ${LOG_LEVEL:-info}
+
+services:
+  api:
+    environment:
+      <<: *common-variables
+      SERVICE_NAME: api
+
+  worker:
+    environment:
+      <<: *common-variables
+      SERVICE_NAME: worker
+```
+
+Perfect for:
+• Shared environment variables
+• Common logging configuration
+• Repeated volume mounts
+• Consistent resource limits
+
+Clean, maintainable, DRY compose files: lours.me/posts/compose-tip-017-yaml-anchors/
+
+#Docker #DockerCompose #YAML #Configuration #BestPractices
+```
+
+---
+
+### Wednesday, Jan 28 - Graceful Shutdown
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #18
+
+Give containers time to clean up!
+
+stop_grace_period: 2m
+stop_signal: SIGTERM
+
+Ensures databases close properly, transactions complete, and data saves.
+
+Learn more: lours.me/posts/compose-tip-018-graceful-shutdown/
+
+#Docker #Runtime #Reliability
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #18: Graceful shutdown with stop_grace_period
+
+Don't lose data on container stops! Configure proper shutdown timeouts to ensure clean termination.
+
+```yaml
+services:
+  worker:
+    stop_grace_period: 5m  # Complete current job
+
+  api:
+    stop_grace_period: 45s # Finish active requests
+
+  postgres:
+    stop_grace_period: 2m  # Flush and close properly
+```
+
+Your app must handle SIGTERM:
+```javascript
+process.on('SIGTERM', async () => {
+  await server.close();
+  await db.close();
+  process.exit(0);
+});
+```
+
+Prevent data corruption and incomplete transactions: lours.me/posts/compose-tip-018-graceful-shutdown/
+
+#Docker #DockerCompose #Runtime #DataIntegrity #DevOps
+```
+
+---
+
+### Thursday, Jan 29 - Override Files
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #19
+
+Seamless local development!
+
+compose.yml + compose.override.yml = automatic merging
+
+Production: docker compose -f compose.yml up
+Dev: docker compose up (includes override)
+
+Details: lours.me/posts/compose-tip-019-override-files/
+
+#Docker #Development #DevEx
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #19: Override files for local development
+
+Keep production and development configs separate! Docker Compose automatically merges compose.override.yml for local tweaks.
+
+Base compose.yml (production):
+```yaml
+services:
+  web:
+    image: myapp:latest
+    ports: ["80:80"]
+```
+
+compose.override.yml (development):
+```yaml
+services:
+  web:
+    build: .
+    ports: ["3000:80"]
+    volumes: [".:/app"]
+    environment:
+      DEBUG: "true"
+```
+
+Deploy strategies:
+• Dev: docker compose up (both files)
+• Prod: docker compose -f compose.yml up (base only)
+• Check merged: docker compose config
+
+Perfect local development workflow: lours.me/posts/compose-tip-019-override-files/
+
+#Docker #DockerCompose #Development #DevEx #LocalDevelopment
+```
+
+---
+
+### Friday, Jan 30 - Docker Compose Logs
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #20
+
+Debug faster with smart logging!
+
+docker compose logs -f --tail 50 api
+docker compose logs --since 5m
+docker compose logs | grep -i error
+
+Master log commands: lours.me/posts/compose-tip-020-docker-compose-logs/
+
+#Docker #Debugging #Logs
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #20: Using docker compose logs effectively
+
+Stop scrolling through endless output! Master log commands to find issues fast and monitor services effectively.
+
+Essential commands:
+```bash
+# Follow specific service
+docker compose logs -f api
+
+# Last 100 lines
+docker compose logs --tail 100
+
+# Recent issues
+docker compose logs --since 5m
+
+# Search for errors
+docker compose logs | grep -i error
+
+# Save for analysis
+docker compose logs -t > debug.log
+```
+
+Pro tip: Create aliases for common tasks
+```bash
+alias dcl='docker compose logs'
+alias dclf='docker compose logs -f'
+alias dcle='docker compose logs | grep -i error'
+```
+
+Debug smarter, not harder: lours.me/posts/compose-tip-020-docker-compose-logs/
+
+#Docker #DockerCompose #Debugging #Logging #Troubleshooting
 ```

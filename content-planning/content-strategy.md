@@ -36,6 +36,10 @@ Based on the first 5 published posts, here's the established format:
 
 ## Content Guidelines
 
+### Weekly Planning Strategy
+
+✅ **Mix topics throughout the week** - Each week should have varied content from different categories (Build, Runtime, Configuration, Networking, Security, etc.) rather than focusing on a single theme for the entire week. This keeps the content fresh and appeals to different audience segments daily.
+
 ### What Makes a "1-Pager"
 
 ✅ **DO Include:**
