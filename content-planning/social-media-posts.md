@@ -1,1084 +1,297 @@
-# Social Media Posts for Docker Compose Tips
+# Docker Compose Tips - Social Media Posts - February 2026
 
-## Completed Posts ✅
+## Week 5: February 2-6, 2026
 
-### Week 1 (Jan 5-9, 2026) - DONE
-
----
-
-### Monday, Jan 5 - Debug your configuration with config
+### Monday, Feb 2 - Bridge vs Host Networking
 
 **🦋 Bluesky:**
 ```
-🐳 🐙Docker Compose Tip #1
+🐳 🐙 Docker Compose Tip #21
 
-Profiles confusing? Use docker compose config to debug.
+Bridge vs Host networking explained!
 
-docker compose --profile dev config --services
+Bridge: Isolated, secure, default
+Host: Direct access, no isolation
 
-Shows ALL services that will run, including dependencies pulled in without the profile.
+When to use each mode and security implications.
 
-Details: lours.me/posts/compose-tip-001-validate-config/
+Guide: lours.me/posts/compose-tip-021-bridge-vs-host/
 
-#Docker #DockerCompose
+#Docker #Networking #Security
 ```
 
 **💼 LinkedIn:**
 ```
-🐳 🐙Docker Compose Tip #1: Debug complex configurations
+🐳 🐙 Docker Compose Tip #21: Understanding bridge vs host networking modes
 
-`docker compose config` is the go-to debugging tool for complex setups.
+Choose the right networking mode for your containers! Understand the trade-offs between isolation and performance.
 
-Especially useful with profiles - they can be tricky. Services get pulled in through dependencies even without the profile.
-
-```bash
-docker compose --profile dev config --services
+Bridge mode (default):
+```yaml
+services:
+  web:
+    networks:
+      - mybridge
+networks:
+  mybridge:
+    driver: bridge
 ```
 
-Shows exactly what will run, how variables resolve, and how multiple files merge.
-
-For CI/CD, validate all profiles:
-```bash
-for profile in dev staging prod; do
-  docker compose --profile $profile config --quiet || exit 1
-done
+Host mode (direct access):
+```yaml
+services:
+  monitoring:
+    network_mode: host
 ```
 
-Full post: lours.me/posts/compose-tip-001-validate-config/
+Key differences:
+• Bridge: Port mapping, network isolation, container-to-container DNS
+• Host: No port mapping needed, better performance, less isolation
+• Security: Bridge provides better isolation
+• Use cases: Host for system monitoring, Bridge for applications
 
-#Docker #DockerCompose #DevOps
-```
+Make informed networking decisions: lours.me/posts/compose-tip-021-bridge-vs-host/
 
----
-
-### Tuesday, Jan 6 - Using --env-file for different environments
-
-**🦋 Bluesky:**
-```
-🐳 🐙Docker Compose Tip #2
-
-Same compose.yml for dev/staging/prod:
-
-docker compose --env-file .env.dev up
-docker compose --env-file .env.prod up
-
-No more copying env vars around. Each environment gets its own file.
-
-More: lours.me/posts/compose-tip-002-env-files/
-
-#Docker #DockerCompose
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙Docker Compose Tip #2: Environment files
-
-One compose.yml, multiple environments. Here's what works:
-
-docker compose --env-file .env.dev up     # Development
-docker compose --env-file .env.prod up    # Production
-
-Keep your environments separate:
-- .env.dev for local development
-- .env.staging for testing
-- .env.prod for production
-
-Layer them if needed:
-docker compose --env-file .env.base --env-file .env.prod up
-
-This setup saves hours of environment debugging.
-
-Details: lours.me/posts/compose-tip-002-env-files/
-
-#Docker #DockerCompose #DevOps
+#Docker #DockerCompose #Networking #Security #Architecture
 ```
 
 ---
 
-### Wednesday, Jan 7 - Service dependencies with health checks
+### Tuesday, Feb 3 - Using Secrets
 
 **🦋 Bluesky:**
 ```
-🐳 🐙Docker Compose Tip #3
+🐳 🐙 Docker Compose Tip #22
 
-"Connection refused" at startup? Stop using sleep 10.
+Secure your sensitive data!
 
-depends_on:
-  db:
-    condition: service_healthy
+secrets:
+  db_password:
+    file: ./secrets/db_pass.txt
 
-Now your app waits for the database to actually be ready.
+Never commit secrets. Use files or external managers.
 
-Examples: lours.me/posts/compose-tip-003-depends-on-healthcheck/
+Learn more: lours.me/posts/compose-tip-022-secrets/
 
-#Docker #DockerCompose
+#Docker #Security #BestPractices
 ```
 
 **💼 LinkedIn:**
 ```
-🐳 🐙Docker Compose Tip #3: Health checks for dependencies
+🐳 🐙 Docker Compose Tip #22: Using secrets in Compose files
 
-Connection refused errors? Your app starts before the database is ready.
-
-Fix it properly:
+Keep passwords and API keys secure! Docker Compose secrets provide a safe way to handle sensitive data.
 
 ```yaml
-depends_on:
-  db:
-    condition: service_healthy
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+  api_key:
+    environment: API_KEY
+
+services:
+  app:
+    image: myapp
+    secrets:
+      - db_password
+      - api_key
+    environment:
+      DB_PASSWORD_FILE: /run/secrets/db_password
 ```
 
-No more arbitrary sleep commands. The app waits until the database passes its health check.
+Best practices:
+• Never hardcode secrets in compose files
+• Use .gitignore for secret files
+• Read from /run/secrets/ in containers
+• Consider external secret managers for production
+• Set proper file permissions (400)
 
-Works with PostgreSQL, MySQL, Redis - any service with a health check.
+Secure your deployments: lours.me/posts/compose-tip-022-secrets/
 
-Examples and patterns: lours.me/posts/compose-tip-003-depends-on-healthcheck/
-
-#Docker #DockerCompose #DevOps
+#Docker #DockerCompose #Security #SecretsManagement #DevSecOps
 ```
 
 ---
 
-### Thursday, Jan 8 - Using SSH keys during build
+### Wednesday, Feb 4 - Multi-platform Builds
 
 **🦋 Bluesky:**
 ```
-🐳 🐙Docker Compose Tip #4
+🐳 🐙 Docker Compose Tip #23
 
-Need private repos during build? Use SSH securely:
+Build for ARM and x86!
 
 build:
-  ssh:
-    - default
+  platforms:
+    - linux/amd64
+    - linux/arm64
 
-RUN --mount=type=ssh \
-    git clone git@github.com:private/repo.git
+One image, multiple architectures. Perfect for M1 Macs and cloud.
 
-Keys never stored in image!
+Details: lours.me/posts/compose-tip-023-multi-platform/
 
-Guide: lours.me/posts/compose-tip-004-ssh-build/
-
-#Docker #Security
+#Docker #ARM #CrossPlatform
 ```
 
 **💼 LinkedIn:**
 ```
-🐳 🐙Docker Compose Tip #4: SSH keys in builds
+🐳 🐙 Docker Compose Tip #23: Multi-platform builds with platforms
 
-Accessing private repositories during Docker builds? Here's the secure way:
+Build once, run everywhere! Create images that work on both ARM and x86 architectures.
 
 ```yaml
 services:
   app:
     build:
-      ssh:
-        - default  # Uses SSH agent
+      context: .
+      platforms:
+        - linux/amd64
+        - linux/arm64
+        - linux/arm/v7
 ```
 
-In Dockerfile:
-```dockerfile
-RUN --mount=type=ssh \
-    git clone git@github.com:company/private-repo.git
-```
-
-Key points:
-- SSH keys never stored in the image
-- Only available during the specific RUN command
-- BuildKit handles forwarding securely
-- Works with git, npm, pip, any SSH-based tool
-
-No more copying keys into images or complex token workarounds.
-
-Full guide: lours.me/posts/compose-tip-004-ssh-build/
-
-#Docker #DockerCompose #Security #DevOps
-```
-
----
-
-### Friday, Jan 9 - Writing Compose files for AI tools
-
-**🦋 Bluesky:**
-```
-🐳 🐙Docker Compose Tip #5
-
-Help AI tools help you. Add comments:
-
-# PostgreSQL with geographic data
-db:
-  image: postgis/postgis:15-3.3
-  # WARNING: Check ./data ownership (1000:1000)
-
-Future maintainers will appreciate it too.
-
-Guide: lours.me/posts/compose-tip-005-ai-documentation/
-
-#Docker #AI
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙Docker Compose Tip #5: Documentation for AI tools
-
-AI assistants work better when they understand your setup.
-
-Add context:
-```yaml
-# Primary API - handles auth and rate limiting
-# Needs: db (PostgreSQL), redis (sessions)
-api:
-  image: myapi:latest
-  environment:
-    JWT_SECRET: ${JWT_SECRET:?Required}  # Min 256 bits
-```
-
-With good comments, AI can:
-• Write relevant health checks
-• Spot security issues
-• Generate CI/CD configs
-• Suggest improvements
-
-Makes a real difference when working with Copilot or Claude.
-
-Patterns: lours.me/posts/compose-tip-005-ai-documentation/
-
-#Docker #DockerCompose #AI #DevTools
-```
-
----
-
-## Posting Schedule & Strategy
-
-### Timing
-- **Post at 9:00 AM CET** (peak European work hours)
-- **Cross-post immediately** on both platforms
-
-### Hashtags
-**Bluesky**: Keep it minimal (2-4 tags)
-- Always: #Docker #DockerCompose
-- Rotate: #DevOps #DevTools #Performance
-
-**LinkedIn**: More comprehensive (5-8 tags)
-- Always: #Docker #DockerCompose #DevOps
-- Add relevant: #SoftwareEngineering #CICD #BestPractices #Microservices
-
-### Engagement Tips
-1. **Reply to comments** within first 2 hours
-2. **Share in relevant communities**:
-   - LinkedIn: Docker groups, DevOps communities
-   - Bluesky: Tech feeds, Docker community
-3. **Pin the week's overview** on Monday
-4. **Thread related tips** for better visibility
-
-### Analytics to Track
-- Engagement rate per platform
-- Click-through to blog
-- Most popular tip of the week
-- Best performing hashtags
-
----
-
-## Week 2 (Jan 12-16, 2026) - Mixed Themes
-
----
-
-### Monday, Jan 12 - Service discovery and internal DNS
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #6
-
-No more hardcoded IPs. Services find each other by name:
-
-web:
-  environment:
-    DB_HOST: postgres  # Just the service name
-
-Compose handles the DNS. Zero config needed.
-
-Details: lours.me/posts/compose-tip-006-service-discovery/
-
-#Docker #DockerCompose
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #6: Service discovery and internal DNS
-
-Stop hardcoding IPs. Compose gives each service a DNS name automatically.
-
-```yaml
-services:
-  web:
-    environment:
-      API_URL: http://api:3000  # 'api' resolves to the right container
-
-  api:
-    image: myapi:latest
-```
-
-No configuration needed. It just works.
-
-DNS updates when containers restart, handles scaling, everything.
-
-Check it: docker compose exec web nslookup api
-
-More: lours.me/posts/compose-tip-006-service-discovery/
-
-#Docker #DockerCompose #Networking #DevOps
-```
-
----
-
-### Tuesday, Jan 13 - Restarting single services
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #7
-
-Need to restart just one service? Keep the rest running:
-
-docker compose up -d web
-
-Updates and restarts ONLY the web service. Database stays up, no data loss.
-
-Perfect for code changes without full stack restart!
-
-Guide: lours.me/posts/compose-tip-007-restart-single/
-
-#Docker #DockerCompose
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #7: Restart single services without stopping the stack
-
-Stop doing `docker compose down && docker compose up` for every change!
-
-Restart just what you need:
+Setup (Docker Desktop handles this automatically):
 ```bash
-# Restart only the web service
-docker compose up -d web
-
-# Force recreate with new image
-docker compose up -d --force-recreate api
-
-# Rebuild and restart
-docker compose up -d --build worker
+# Only needed if not using Docker Desktop:
+docker buildx create --use
+# Then build and push:
+docker compose build --push
 ```
-
-Your database stays running, Redis keeps its cache, queues don't lose messages.
-
-This simple pattern saves hours of waiting for services to reinitialize during development.
-
-Real-world example: Updating API code while keeping PostgreSQL, Redis, and RabbitMQ running. Development time cut by 70%.
-
-Full guide: lours.me/posts/compose-tip-007-restart-single/
-
-#Docker #DockerCompose #DeveloperProductivity #DevOps
-```
-
----
-
-### Wednesday, Jan 14 - Healthchecks with Docker Hardened Images
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #8
-
-DHI images = max security. But no curl for healthchecks!
-
-Solution: Secure sidecar
-app-health:
-  image: dhi.io/curl:8-debian13-dev
-  network_mode: "service:app"
-
-Shares network namespace → localhost works!
-
-Guide: lours.me/posts/compose-tip-008-dhi-healthcheck/
-
-#Docker #Security
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #8: Healthchecks with Docker Hardened Images
-
-Docker Hardened Images (DHI) maximize security but lack shells and curl. Solution: secure sidecar with shared network namespace.
-
-```yaml
-app:
-  image: dhi.io/node:25-debian13-sfw-ent-dev
-  ports:
-    - "3000:3000"
-
-app-health:
-  image: dhi.io/curl:8-debian13-dev
-  network_mode: "service:app"  # Shares app's network!
-  healthcheck:
-    test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-```
-
-Key insight: `network_mode: "service:app"` lets the sidecar access localhost directly.
 
 Benefits:
-🔒 Both containers use DHI - maximum security
-🎯 Sidecar sees only app's network
-📊 Full observability maintained
-🚀 Pattern works in Kubernetes too
+• Support M1/M2 Macs and Intel machines
+• Deploy to ARM-based cloud instances (Graviton)
+• Raspberry Pi compatibility
+• Single registry tag for all platforms
 
-Real impact: Zero shell access in production while keeping healthchecks.
+Future-proof your containers: lours.me/posts/compose-tip-023-multi-platform/
 
-Full guide: lours.me/posts/compose-tip-008-dhi-healthcheck/
-
-#Docker #DockerCompose #Security #DHI #DevSecOps
+#Docker #DockerCompose #ARM #CrossPlatform #CloudNative
 ```
 
 ---
 
-### Thursday, Jan 15 - Publishing Compose applications as OCI artifacts
+### Thursday, Feb 5 - Service Profiles
 
 **🦋 Bluesky:**
 ```
-🐳 🐙 Docker Compose Tip #9
+🐳 🐙 Docker Compose Tip #24
 
-Publish Compose apps as OCI artifacts!
+Organize optional services!
 
-docker compose publish myapp:v1
+profiles: ["debug", "test"]
 
-Users run with one command:
-docker compose -f oci://docker.io/myapp:v1 up
+docker compose --profile debug up
 
-No git clone, no README. Just run.
+Enable only what you need. Keep compose files clean.
 
-Guide: lours.me/posts/compose-tip-009-oci-artifacts/
+Learn how: lours.me/posts/compose-tip-024-profiles/
 
-#Docker #OCI
+#Docker #Development #Organization
 ```
 
 **💼 LinkedIn:**
 ```
-🐳 🐙 Docker Compose Tip #9: Publishing Compose applications as OCI artifacts
+🐳 🐙 Docker Compose Tip #24: Using profiles to organize optional services
 
-Package and distribute entire Compose applications through container registries!
-
-```bash
-# Publish your compose.yml as OCI artifact
-docker compose publish mycompany/app:v1.0
-
-# Users run directly from registry
-docker compose -f oci://docker.io/mycompany/app:v1.0 up
-```
-
-The compose.yml is stored as an OCI artifact alongside your images.
-
-Key features:
-📦 Compose config stored in registry
-🚀 One command deployment
-🔒 Registry authentication & scanning
-📌 Pin images with --resolve-image-digests
-
-Perfect for:
-• Demo applications
-• Internal tool distribution
-• Development environments
-• Customer deployments
-
-Requires Docker Compose 2.34.0+
-
-This transforms app distribution - from complex READMEs to single commands.
-
-Complete guide: lours.me/posts/compose-tip-009-oci-artifacts/
-
-#Docker #DockerCompose #OCI #CloudNative #DevOps
-```
-
----
-
-### Friday, Jan 16 - Using init: true for proper PID 1 handling
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #10
-
-Zombie processes? Signals not working?
-
-services:
-  app:
-    init: true
-
-Adds tiny init system (Tini) as PID 1. Handles signals properly, reaps zombies.
-
-Essential for Node.js, Python apps!
-
-Details: lours.me/posts/compose-tip-010-init-pid1/
-
-#Docker #BestPractices
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #10: Proper PID 1 handling with init
-
-Your app shouldn't run as PID 1 in a container. Here's why and how to fix it:
+Control which services start! Profiles let you group services for different scenarios.
 
 ```yaml
 services:
   app:
-    image: node:20
-    init: true  # Adds Tini as PID 1
-    command: node server.js
+    image: myapp
+    # Always starts
+
+  debug:
+    image: debug-tools
+    profiles: ["debug"]
+
+  tests:
+    image: test-runner
+    profiles: ["test"]
+
+  monitoring:
+    image: prometheus
+    profiles: ["debug", "monitoring"]
 ```
 
-What it solves:
-🧟 Zombie process reaping
-📡 Proper signal forwarding (SIGTERM, SIGINT)
-🛑 Clean shutdowns
-⚡ Faster container stops
+Usage:
+```bash
+# Normal startup
+docker compose up
 
-Without init:
-• Your app becomes PID 1
-• Must handle UNIX signals properly
-• Must reap zombie processes
-• Many runtimes (Node.js, Python) don't do this well
+# Include debug tools
+docker compose --profile debug up
 
-Real impact:
-• Graceful shutdowns in Kubernetes
-• No more 10-second waits on docker stop
-• Zero zombie processes in long-running containers
+# Run tests
+docker compose --profile test up
 
-Essential for production, especially with interpreted languages.
+# Multiple profiles
+docker compose --profile debug --profile monitoring up
+```
 
-Full explanation: lours.me/posts/compose-tip-010-init-pid1/
+Perfect for: Debug tools, test services, monitoring stacks, development databases
 
-#Docker #DockerCompose #ProcessManagement #BestPractices #Production
+Flexible service orchestration: lours.me/posts/compose-tip-024-profiles/
+
+#Docker #DockerCompose #Development #Testing #DevEx
 ```
 
 ---
 
-## Week 3 (Jan 19-23, 2026) - Mixed Themes
-
----
-
-### Monday, Jan 19 - Docker Compose Watch
+### Friday, Feb 6 - Docker Compose Events
 
 **🦋 Bluesky:**
 ```
-🐳 🐙 Docker Compose Tip #11
+🐳 🐙 Docker Compose Tip #25
 
-Stop manually restarting containers!
+Monitor container lifecycle!
 
-docker compose up --watch
+docker compose events --json
 
-Auto-syncs files and reloads services. Configure file watching for instant updates during development.
+Track starts, stops, health changes. Build monitoring and automation.
 
-Read more: lours.me/posts/compose-tip-011-docker-compose-watch/
+Full guide: lours.me/posts/compose-tip-025-events/
 
-#Docker #DockerCompose #DevTools
+#Docker #Monitoring #Observability
 ```
 
 **💼 LinkedIn:**
 ```
-🐳 🐙 Docker Compose Tip #11: Mastering docker compose up --watch
+🐳 🐙 Docker Compose Tip #25: Using docker compose events for monitoring
 
-Stop the edit-rebuild-restart cycle! Docker Compose Watch automatically syncs your code changes and reloads services. Perfect for frontend hot reloading, backend auto-restart, and config updates.
-
-Configure different actions:
-• sync: Instant file updates
-• rebuild: For dependency changes
-• sync+restart: For config files
-
-Zero-interruption development workflow.
-
-Learn how to configure watch actions for different file types: lours.me/posts/compose-tip-011-docker-compose-watch/
-
-#Docker #DockerCompose #DevTools #DeveloperProductivity
-```
-
----
-
-### Tuesday, Jan 20 - Target for Build Stages
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #12
-
-One Dockerfile, multiple environments!
-
-Use `target` to build specific stages:
-• Dev stage: 450MB (with tools)
-• Prod stage: 12MB (optimized)
-
-That's 37x smaller! Same Dockerfile.
-
-Details: lours.me/posts/compose-tip-012-target-build-stages/
-
-#Docker #DockerCompose
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #12: Using target to specify build stages
-
-Multi-stage Dockerfiles are powerful, but did you know you can target specific stages in Docker Compose?
-
-```yaml
-services:
-  app-dev:
-    build:
-      target: development  # All debug tools
-
-  app-prod:
-    build:
-      target: production  # Optimized & minimal
-```
-
-Real impact:
-• Development image: 450MB
-• Production image: 12MB
-• Same Dockerfile, 37x size reduction!
-
-Build development images with debugging tools, test stages for CI, and slim production images - all from one Dockerfile.
-
-See how to reduce image sizes dramatically: lours.me/posts/compose-tip-012-target-build-stages/
-
-#Docker #DockerCompose #BuildOptimization #DevOps
-```
-
----
-
-### Wednesday, Jan 21 - External Networks
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #13
-
-Connect containers across different projects!
-
-Create external networks to share databases, caches, or APIs between multiple Compose stacks.
-
-Perfect for microservices architecture.
-
-Learn how: lours.me/posts/compose-tip-013-external-networks/
-
-#Docker #Microservices
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #13: Using external networks to connect multiple projects
-
-Need your frontend project to communicate with a backend API in another Compose project? External networks are the solution.
+Real-time container lifecycle monitoring! Track what's happening in your Compose stack.
 
 ```bash
-# Create once
-docker network create shared-network
+# Watch all events
+docker compose events
+
+# JSON output for processing
+docker compose events --json
+
+# Filter specific services
+docker compose events web worker
+
+# Since timestamp
+docker compose events --since "2024-02-06T10:00:00"
 ```
 
-```yaml
-# Reference in both projects
-networks:
-  shared:
-    external: true
-    name: shared-network
-```
+Event types:
+• Container: create, start, stop, die, kill
+• Health: health_status changes
+• Network: connect, disconnect
+• Volume: mount, unmount
 
-Use cases:
-• Share databases between services
-• Connect microservices
-• Mirror production architecture locally
-• Test service interactions
-
-Services find each other by name across projects - zero configuration needed.
-
-Full guide with examples: lours.me/posts/compose-tip-013-external-networks/
-
-#Docker #DockerCompose #Microservices #Networking #DevOps
-```
-
----
-
-### Thursday, Jan 22 - Non-root Users
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #14
-
-Stop running containers as root!
-
-services:
-  app:
-    user: "1000:1000"
-
-Simple change, huge security improvement. Defense in depth.
-
-How to do it right: lours.me/posts/compose-tip-014-non-root-users/
-
-#Docker #Security #DevSecOps
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #14: Running containers as non-root users
-
-Security best practice: Never run containers as root. Here's how to do it right in Docker Compose.
-
-```yaml
-services:
-  app:
-    user: "1000:1000"  # Run as non-root
-
-  # Or use built-in users
-  nginx:
-    user: "nginx"
-```
-
-Key challenges solved:
-• File permission handling
-• Ports below 1024
-• Volume ownership
-• Init containers for permission fixes
-
-Real security benefits:
-🔒 Limited blast radius if compromised
-🛡️ Defense in depth
-✅ Compliance with security standards
-🚫 No root escalation possible
-
-Improve your container security today: lours.me/posts/compose-tip-014-non-root-users/
-
-#Docker #DockerCompose #Security #DevSecOps #BestPractices
-```
-
----
-
-### Friday, Jan 23 - Blue-Green Deployments with Traefik
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #15
-
-Zero-downtime deployments with Traefik!
-
-Switch traffic using environment variables:
-BLUE_ENABLED=false GREEN_ENABLED=true docker compose up -d
-
-Instant routing changes, weighted canary deployments, automatic health checks.
-
-Complete guide: lours.me/posts/compose-tip-015-blue-green-deployments/
-
-#Docker #Traefik #DevOps
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #15: Blue-green deployments with Traefik
-
-Deploy with confidence using Traefik's dynamic routing! Zero-downtime deployments with automatic health checks and instant rollback.
-
-```yaml
-app-blue:
-  labels:
-    - "traefik.enable=${BLUE_ENABLED:-true}"
-    - "traefik.http.routers.app-blue.priority=1"
-
-app-green:
-  labels:
-    - "traefik.enable=${GREEN_ENABLED:-false}"
-    - "traefik.http.routers.app-green.priority=2"
-```
-
-Switch traffic instantly:
+Automation ideas:
 ```bash
-# Enable green, disable blue
-BLUE_ENABLED=false GREEN_ENABLED=true docker compose up -d
-
-# Rollback to blue
-BLUE_ENABLED=true GREEN_ENABLED=false docker compose up -d
+docker compose events --json | \
+  jq 'select(.action=="die")' | \
+  while read event; do
+    notify-slack "Container died: $event"
+  done
 ```
 
-Features:
-• Environment variable control
-• Weighted canary deployments
-• Health-check based routing
-• Real-time monitoring via dashboard
+Build powerful monitoring workflows: lours.me/posts/compose-tip-025-events/
 
-Transform your deployment strategy with environment variables and Traefik: lours.me/posts/compose-tip-015-blue-green-deployments/
-
-#Docker #DockerCompose #Traefik #Deployments #DevOps #ZeroDowntime
-```
-
----
-
-## Week 4: January 26-30, 2026
-
-### Monday, Jan 26 - Resource Limits
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #16
-
-Prevent container resource exhaustion!
-
-Set CPU and memory limits:
-deploy:
-  resources:
-    limits:
-      cpus: '0.5'
-      memory: 512M
-
-Monitor with: docker compose stats
-
-Full guide: lours.me/posts/compose-tip-016-resource-limits/
-
-#Docker #DockerCompose #Performance
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #16: Setting resource limits with deploy.resources
-
-Protect your system from runaway containers! Control CPU and memory consumption to ensure stable multi-service deployments.
-
-```yaml
-deploy:
-  resources:
-    limits:
-      cpus: '2.0'      # 2 CPU cores max
-      memory: 2G       # 2GB memory max
-    reservations:
-      cpus: '1.0'      # Guaranteed minimum
-      memory: 1G
-```
-
-Monitor resource usage:
-• docker compose stats - Real-time monitoring
-• docker compose stats app - Service-specific stats
-• Use environment variables for dev/prod limits
-
-Prevent out-of-memory crashes and CPU throttling before they happen: lours.me/posts/compose-tip-016-resource-limits/
-
-#Docker #DockerCompose #Performance #ResourceManagement #DevOps
-```
-
----
-
-### Tuesday, Jan 27 - YAML Anchors
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #17
-
-Stop copy-pasting! Use YAML anchors:
-
-x-logging: &default-logging
-  logging:
-    driver: json-file
-    options:
-      max-size: "10m"
-
-services:
-  web:
-    <<: *default-logging
-
-DRY compose configs: lours.me/posts/compose-tip-017-yaml-anchors/
-
-#Docker #YAML #Configuration
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #17: YAML anchors to reduce duplication
-
-Eliminate copy-paste in your Compose files! Define once, reuse everywhere with YAML anchors and aliases.
-
-```yaml
-x-common-variables: &common-variables
-  REDIS_URL: redis://redis:6379
-  POSTGRES_HOST: postgres
-  LOG_LEVEL: ${LOG_LEVEL:-info}
-
-services:
-  api:
-    environment:
-      <<: *common-variables
-      SERVICE_NAME: api
-
-  worker:
-    environment:
-      <<: *common-variables
-      SERVICE_NAME: worker
-```
-
-Perfect for:
-• Shared environment variables
-• Common logging configuration
-• Repeated volume mounts
-• Consistent resource limits
-
-Clean, maintainable, DRY compose files: lours.me/posts/compose-tip-017-yaml-anchors/
-
-#Docker #DockerCompose #YAML #Configuration #BestPractices
-```
-
----
-
-### Wednesday, Jan 28 - Graceful Shutdown
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #18
-
-Give containers time to clean up!
-
-stop_grace_period: 2m
-stop_signal: SIGTERM
-
-Ensures databases close properly, transactions complete, and data saves.
-
-Learn more: lours.me/posts/compose-tip-018-graceful-shutdown/
-
-#Docker #Runtime #Reliability
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #18: Graceful shutdown with stop_grace_period
-
-Don't lose data on container stops! Configure proper shutdown timeouts to ensure clean termination.
-
-```yaml
-services:
-  worker:
-    stop_grace_period: 5m  # Complete current job
-
-  api:
-    stop_grace_period: 45s # Finish active requests
-
-  postgres:
-    stop_grace_period: 2m  # Flush and close properly
-```
-
-Your app must handle SIGTERM:
-```javascript
-process.on('SIGTERM', async () => {
-  await server.close();
-  await db.close();
-  process.exit(0);
-});
-```
-
-Prevent data corruption and incomplete transactions: lours.me/posts/compose-tip-018-graceful-shutdown/
-
-#Docker #DockerCompose #Runtime #DataIntegrity #DevOps
-```
-
----
-
-### Thursday, Jan 29 - Override Files
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #19
-
-Seamless local development!
-
-compose.yml + compose.override.yml = automatic merging
-
-Production: docker compose -f compose.yml up
-Dev: docker compose up (includes override)
-
-Details: lours.me/posts/compose-tip-019-override-files/
-
-#Docker #Development #DevEx
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #19: Override files for local development
-
-Keep production and development configs separate! Docker Compose automatically merges compose.override.yml for local tweaks.
-
-Base compose.yml (production):
-```yaml
-services:
-  web:
-    image: myapp:latest
-    ports: ["80:80"]
-```
-
-compose.override.yml (development):
-```yaml
-services:
-  web:
-    build: .
-    ports: ["3000:80"]
-    volumes: [".:/app"]
-    environment:
-      DEBUG: "true"
-```
-
-Deploy strategies:
-• Dev: docker compose up (both files)
-• Prod: docker compose -f compose.yml up (base only)
-• Check merged: docker compose config
-
-Perfect local development workflow: lours.me/posts/compose-tip-019-override-files/
-
-#Docker #DockerCompose #Development #DevEx #LocalDevelopment
-```
-
----
-
-### Friday, Jan 30 - Docker Compose Logs
-
-**🦋 Bluesky:**
-```
-🐳 🐙 Docker Compose Tip #20
-
-Debug faster with smart logging!
-
-docker compose logs -f --tail 50 api
-docker compose logs --since 5m
-docker compose logs | grep -i error
-
-Master log commands: lours.me/posts/compose-tip-020-docker-compose-logs/
-
-#Docker #Debugging #Logs
-```
-
-**💼 LinkedIn:**
-```
-🐳 🐙 Docker Compose Tip #20: Using docker compose logs effectively
-
-Stop scrolling through endless output! Master log commands to find issues fast and monitor services effectively.
-
-Essential commands:
-```bash
-# Follow specific service
-docker compose logs -f api
-
-# Last 100 lines
-docker compose logs --tail 100
-
-# Recent issues
-docker compose logs --since 5m
-
-# Search for errors
-docker compose logs | grep -i error
-
-# Save for analysis
-docker compose logs -t > debug.log
-```
-
-Pro tip: Create aliases for common tasks
-```bash
-alias dcl='docker compose logs'
-alias dclf='docker compose logs -f'
-alias dcle='docker compose logs | grep -i error'
-```
-
-Debug smarter, not harder: lours.me/posts/compose-tip-020-docker-compose-logs/
-
-#Docker #DockerCompose #Debugging #Logging #Troubleshooting
+#Docker #DockerCompose #Monitoring #Observability #Automation
 ```
