@@ -48,11 +48,11 @@
 - **Thu**: Using `profiles` to organize optional services (Development)
 - **Fri**: Using `docker compose events` for monitoring (Debugging)
 
-### Week 6 (Feb 9-13) - Mixed Themes
+### Week 6 (Feb 9-13) - Mixed Themes - READY ✅
 - **Mon**: Using `restart` policies effectively (Runtime)
-- **Tue**: Port binding best practices and security (Networking/Security)
-- **Wed**: Using `cache_from` and `cache_to` for faster builds (Build)
-- **Thu**: Volume backup strategies (Storage)
+- **Tue**: Extension fields as metadata for tools and platforms (Metadata/Integration)
+- **Wed**: Converting docker run commands to Compose (Migration)
+- **Thu**: Container capabilities and security options (Security)
 - **Fri**: Compose `include` for modular configurations (Configuration)
 
 ### Week 7 (Feb 16-20) - Mixed Themes

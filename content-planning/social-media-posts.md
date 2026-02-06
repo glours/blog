@@ -294,4 +294,293 @@ docker compose events --json | \
 Build powerful monitoring workflows: lours.me/posts/compose-tip-025-events/
 
 #Docker #DockerCompose #Monitoring #Observability #Automation
+```# Docker Compose Tips - Social Media Posts - Week 6
+
+## Week 6: February 9-13, 2026
+
+### Monday, Feb 9 - Restart Policies
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #26
+
+Keep services running with smart restart policies!
+
+restart: always | unless-stopped | on-failure | no
+
+Configure automatic recovery from crashes and failures.
+
+Guide: lours.me/posts/compose-tip-026-restart-policies/
+
+#Docker #Reliability #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #26: Using restart policies effectively
+
+Ensure your containers recover from crashes automatically! Choose the right restart policy for each service.
+
+```yaml
+services:
+  # Critical services
+  database:
+    restart: always
+
+  # Dev services
+  debug:
+    restart: unless-stopped
+
+  # Flaky services
+  api:
+    restart: on-failure:5
+```
+
+Options explained:
+• always: Restarts even after Docker daemon restart
+• unless-stopped: Restarts unless manually stopped
+• on-failure: Only on non-zero exit (with optional retry limit)
+• no: Never restart (default)
+
+Build resilient applications: lours.me/posts/compose-tip-026-restart-policies/
+
+#Docker #DockerCompose #Reliability #DevOps #Containers
+```
+
+---
+
+### Tuesday, Feb 10 - Extension Fields as Metadata
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #27
+
+Extension fields aren't just for YAML reuse!
+
+x-region: us-east-1
+x-kubernetes:
+  namespace: production
+
+services:
+  api:
+    x-tier: frontend
+    x-owner: api-team
+
+Metadata for tools & platforms!
+
+Guide: lours.me/posts/compose-tip-027-extension-metadata/
+
+#Docker #Kubernetes #Metadata
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #27: Extension fields as metadata for tools and platforms
+
+Use extension fields to carry metadata for Kubernetes, monitoring, and deployment tools!
+
+```yaml
+x-kubernetes:
+  namespace: production
+  ingress-class: nginx
+
+services:
+  web:
+    image: webapp:v2
+    x-kubernetes:
+      annotations:
+        prometheus.io/scrape: "true"
+    x-aws:
+      instance-type: "t3.medium"
+    x-monitoring:
+      slo-target: 99.95
+```
+
+Use cases:
+• Platform-specific configurations (AWS, Azure, GCP)
+• Kubernetes deployment hints via Compose Bridge
+• Monitoring and alerting metadata
+• Cost tracking and ownership information
+• CI/CD pipeline configuration
+
+Bridge Compose to any platform: lours.me/posts/compose-tip-027-extension-metadata/
+
+#Docker #DockerCompose #Kubernetes #CloudNative #Metadata
+```
+
+---
+
+### Wednesday, Feb 11 - Docker Run to Compose
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #28
+
+Convert docker run to Compose!
+
+docker run -p 3000:3000 -v ./data:/app myapp
+
+Becomes:
+services:
+  myapp:
+    image: myapp
+    ports: ["3000:3000"]
+    volumes: ["./data:/app"]
+
+Clean & maintainable!
+
+Guide: lours.me/posts/compose-tip-028-docker-run-to-compose/
+
+#Docker #Migration #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #28: Converting docker run commands to Compose
+
+Stop managing long docker run commands! Transform them into clean Compose files.
+
+```bash
+docker run -d --name app \
+  -p 3000:3000 \
+  -e NODE_ENV=production \
+  -v $(pwd)/data:/app/data \
+  --restart unless-stopped \
+  myapp:latest
+```
+
+Becomes:
+```yaml
+services:
+  app:
+    image: myapp:latest
+    ports: ["3000:3000"]
+    environment:
+      NODE_ENV: production
+    volumes: ["./data:/app/data"]
+    restart: unless-stopped
+```
+
+Common mappings:
+• -p → ports, -v → volumes, -e → environment
+• --network → networks, --user → user
+• --memory/--cpus → deploy.resources
+• --cap-add/drop → cap_add/cap_drop
+• --restart → restart
+
+Version control your container configs: lours.me/posts/compose-tip-028-docker-run-to-compose/
+
+#Docker #DockerCompose #Migration #DevOps #Automation
+```
+
+---
+
+### Thursday, Feb 12 - Container Capabilities
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #29
+
+Principle of least privilege!
+
+cap_drop:
+  - ALL
+cap_add:
+  - NET_BIND_SERVICE
+
+Drop all capabilities, add only what's needed.
+
+Secure containers properly!
+
+Guide: lours.me/posts/compose-tip-029-container-capabilities/
+
+#Docker #Security #Linux
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #29: Container capabilities and security options
+
+Fine-tune container security! Control exactly what your containers can do with Linux capabilities.
+
+```yaml
+services:
+  secure-app:
+    image: myapp
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE  # Bind ports < 1024
+      - CHOWN            # Change file ownership
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    user: "1000:1000"
+```
+
+Security patterns:
+• Drop ALL capabilities by default
+• Add only required capabilities
+• Use read-only root filesystem
+• Run as non-root user
+• Enable no-new-privileges
+
+Defense in depth for containers: lours.me/posts/compose-tip-029-container-capabilities/
+
+#Docker #DockerCompose #Security #Linux #DevSecOps
+```
+
+---
+
+### Friday, Feb 13 - Compose Include
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #30
+
+Modular configs with include!
+
+include:
+  - path: ./services/database.yml
+  - path: ./monitoring.yml
+  - path: ${ENV_CONFIG:-dev.yml}
+
+Keep configurations DRY and reusable.
+
+Learn more: lours.me/posts/compose-tip-030-include/
+
+#Docker #Configuration #Modular
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #30: Compose include for modular configurations
+
+Build modular, reusable configurations! The include directive enables clean, organized Compose setups.
+
+```yaml
+# compose.yml
+include:
+  - path: ./services/database.yml
+  - path: ./services/cache.yml
+  - path: ./environments/${ENV:-dev}.yml
+
+services:
+  app:
+    image: myapp
+    depends_on:
+      - postgres
+      - redis
+```
+
+Benefits:
+• Split configs into logical modules
+• Share common configurations across teams
+• Create reusable service libraries
+• Conditional includes based on environment
+• Layer configurations with overrides
+
+Scale your compose architecture: lours.me/posts/compose-tip-030-include/
+
+#Docker #DockerCompose #Configuration #Architecture #DevOps
 ```
