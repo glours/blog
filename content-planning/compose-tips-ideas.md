@@ -1,9 +1,10 @@
-# Docker Compose Daily Tips - Content Planning
+# Docker Compose Tips - Content Planning
 
-## Publishing Schedule
-- **When**: Monday to Friday, 9am CET
+## Publishing Schedule (Updated Feb 2026)
+- **When**: Monday, Wednesday, Friday at 9am CET (3 tips/week)
 - **Format**: Short, focused tips (1-pager)
 - **Categories**: Runtime, Build, Configuration, AI/Development Tools
+- **Note**: Reduced from 5/week to 3/week based on community feedback to avoid content fatigue
 
 ---
 
@@ -55,19 +56,29 @@
 - **Thu**: Container capabilities and security options (Security)
 - **Fri**: Compose `include` for modular configurations (Configuration)
 
-### Week 7 (Feb 16-20) - Mixed Themes
-- **Mon**: Network isolation between services (Security)
-- **Tue**: Build contexts and dockerignore patterns (Build)
-- **Wed**: Database migration patterns (Patterns)
-- **Thu**: Debugging with `docker compose exec` vs `run` (Debugging)
-- **Fri**: Using `tmpfs` for ephemeral storage (Performance)
+### Week 7 (Feb 16-20) - NO TIPS WEEK
+- Content preparation week - no tips published
+- Gathering community feedback on frequency change
 
-### Week 8 (Feb 23-27) - Mixed Themes
-- **Mon**: Using `extra_hosts` for custom DNS entries (Networking)
-- **Tue**: Health check patterns and debugging (Runtime)
+### Week 8 (Feb 23-27) - Mixed Themes (3 tips/week begins) - READY ✅
+- **Mon**: Network isolation between services (Security)
+- **Wed**: Build contexts and dockerignore patterns (Build)
+- **Fri**: Using logging drivers and options (Logging/Monitoring)
+
+### Week 9 (Mar 2-6) - Mixed Themes - READY ✅
+- **Mon**: Debugging with `docker compose exec` vs `run` (Debugging)
+- **Wed**: Using `tmpfs` for ephemeral storage (Performance)
+- **Fri**: Using `extra_hosts` for custom DNS entries (Networking)
+
+### Week 10 (Mar 9-13) - Mixed Themes
+- **Mon**: Health check patterns and debugging (Runtime)
 - **Wed**: Understanding container exit codes (Debugging)
-- **Thu**: Compose in CI/CD pipelines (DevOps)
-- **Fri**: Using labels for service organization and monitoring (Configuration)
+- **Fri**: Compose in CI/CD pipelines (DevOps)
+
+### Week 11 (Mar 16-20) - Mixed Themes
+- **Mon**: Using labels for service organization and monitoring (Configuration)
+- **Wed**: Container lifecycle hooks (Runtime)
+- **Fri**: Managing log drivers and options (Debugging)
 
 ---
 

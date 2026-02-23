@@ -584,3 +584,336 @@ Scale your compose architecture: lours.me/posts/compose-tip-030-include/
 
 #Docker #DockerCompose #Configuration #Architecture #DevOps
 ```
+
+---
+
+## Week 7: February 16-20, 2026 - NO TIPS
+- Content preparation week
+- Gathering feedback on frequency change
+
+---
+
+## Week 8: February 23-27, 2026 (Back with 3 tips/week!)
+
+### Monday, Feb 23 - Network Isolation
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #31
+
+Not every service needs to talk to every other service!
+
+networks:
+  frontend:
+  backend:
+  database:
+    internal: true
+
+Isolate by tier for better security.
+
+Guide: lours.me/posts/compose-tip-031-network-isolation/
+
+#Docker #Security #Networking
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #31: Network isolation between services
+
+Enhance security with network segmentation! Control which services can communicate.
+
+```yaml
+services:
+  web:
+    networks: [frontend, backend]
+
+  api:
+    networks: [backend, database]
+
+  postgres:
+    networks: [database]  # Only API can reach
+
+networks:
+  frontend:
+  backend:
+  database:
+    internal: true  # No external access
+```
+
+Benefits:
+• Prevent direct database access from frontend
+• Isolate microservices by domain
+• Internal networks for sensitive services
+• Reduce attack surface
+• Implement zero-trust architecture
+
+Defense in depth starts here: lours.me/posts/compose-tip-031-network-isolation/
+
+#Docker #DockerCompose #Security #Networking #ZeroTrust
+```
+
+---
+
+### Wednesday, Feb 25 - Build Context & Dockerignore
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #32
+
+Speed up builds with proper .dockerignore!
+
+# .dockerignore
+node_modules
+.git
+*.log
+dist
+
+Smaller context = faster builds!
+
+Guide: lours.me/posts/compose-tip-032-build-context-dockerignore/
+
+#Docker #Performance #Build
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #32: Build contexts and dockerignore patterns
+
+Optimize build performance! Don't send unnecessary files to Docker daemon.
+
+```yaml
+services:
+  frontend:
+    build:
+      context: ./frontend  # Only what's needed
+
+  backend:
+    build:
+      context: ./backend
+```
+
+Essential .dockerignore:
+```
+.git
+node_modules
+*.log
+.env
+dist/
+coverage/
+```
+
+Quick wins:
+• Reduce context size from GB to MB
+• Faster builds and deployments
+• Prevent secrets from entering images
+• Different .dockerignore per service
+• Monitor context size before building
+
+Build smarter: lours.me/posts/compose-tip-032-build-context-dockerignore/
+
+#Docker #DockerCompose #DevOps #Performance #CICD
+```
+
+---
+
+### Friday, Feb 27 - Logging Drivers
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #33
+
+Control your logs!
+
+logging:
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+Different drivers for different needs!
+
+Guide: lours.me/posts/compose-tip-033-logging-drivers/
+
+#Docker #Logging #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #33: Using logging drivers and options
+
+Configure logging drivers for better management, rotation, and analysis!
+
+```yaml
+services:
+  app:
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+        compress: "true"
+        labels: "service,version"
+```
+
+Available drivers:
+• json-file: Default with rotation options
+• local: Optimized for performance
+• syslog: Centralized logging
+• fluentd: Log aggregation
+• awslogs: Direct to CloudWatch
+
+Never lose important logs: lours.me/posts/compose-tip-033-logging-drivers/
+
+#Docker #DockerCompose #Logging #Monitoring #DevOps
+```
+
+---
+
+## Week 9: March 2-6, 2026
+
+### Monday, Mar 2 - Exec vs Run
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #34
+
+exec vs run - know the difference!
+
+exec: existing container
+run: new container
+
+docker compose exec web bash  # Debug running
+docker compose run --rm test  # One-off task
+
+Details: lours.me/posts/compose-tip-034-exec-vs-run/
+
+#Docker #Debugging #CLI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #34: Debugging with exec vs run
+
+Choose the right tool! Understanding when to use each command.
+
+```bash
+# exec: Enter running container
+docker compose exec web bash
+docker compose exec db psql
+
+# run: Create new container
+docker compose run --rm migrate
+docker compose run --rm --service-ports test
+```
+
+Key differences:
+• exec requires running container
+• run doesn't expose ports by default
+• run doesn't start dependencies by default
+• exec maintains existing environment
+• run allows entrypoint override
+
+Debug smarter: lours.me/posts/compose-tip-034-exec-vs-run/
+
+#Docker #DockerCompose #Debugging #DevOps #CLI
+```
+
+---
+
+### Wednesday, Mar 4 - Tmpfs Storage
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #35
+
+⚡ RAM-speed storage with tmpfs!
+
+tmpfs:
+  - /tmp:size=100M
+  - /app/cache:size=500M
+
+Fast, secure, self-cleaning!
+
+Guide: lours.me/posts/compose-tip-035-tmpfs-storage/
+
+#Docker #Performance #Storage
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #35: Using tmpfs for ephemeral storage
+
+Boost I/O performance with in-memory storage!
+
+```yaml
+services:
+  app:
+    tmpfs:
+      - /tmp:size=100M
+      - /app/cache:size=1G
+    # Or with read-only root
+    read_only: true
+    tmpfs: [/tmp, /var/run]
+```
+
+Perfect for:
+• Build caches and artifacts
+• Session storage
+• Temporary file processing
+• Test databases
+• CI/CD pipelines
+
+Benefits: RAM speed, auto-cleanup, enhanced security!
+
+Speed up your stack: lours.me/posts/compose-tip-035-tmpfs-storage/
+
+#Docker #DockerCompose #Performance #Storage #Security
+```
+
+---
+
+### Friday, Mar 6 - Extra Hosts
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #36
+
+Custom DNS without touching /etc/hosts!
+
+extra_hosts:
+  - "api.local:192.168.1.100"
+  - "host.docker:host-gateway"
+
+Perfect for local development!
+
+Learn: lours.me/posts/compose-tip-036-extra-hosts/
+
+#Docker #Networking #DNS
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #36: Using extra_hosts for custom DNS entries
+
+Add custom hostname mappings directly in Compose!
+
+```yaml
+services:
+  app:
+    extra_hosts:
+      - "api.local:192.168.1.100"
+      - "db.local:192.168.1.101"
+      - "host.machine:host-gateway"
+```
+
+Use cases:
+• Override production URLs for testing
+• Connect to host machine services
+• Create service aliases
+• Environment-specific endpoints
+• Mock external dependencies
+
+No system file changes needed: lours.me/posts/compose-tip-036-extra-hosts/
+
+#Docker #DockerCompose #Networking #DNS #Development
+```
