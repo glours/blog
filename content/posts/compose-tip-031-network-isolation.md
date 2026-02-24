@@ -91,7 +91,7 @@ Now:
 
 ## Internal networks
 
-Prevent external access entirely:
+Use internal networks to isolate from host network interfaces:
 
 ```yaml
 services:
@@ -108,10 +108,12 @@ services:
 
 networks:
   internal:
-    internal: true  # No external access
+    internal: true  # No connection to host network interfaces
   public:
-    # Regular network with external access
+    # Regular network connected to host
 ```
+
+The `internal: true` flag creates a network without a connection to the host's network interfaces - it has no default gateway for external connectivity. Containers can still reach the internet if they're also connected to other non-internal networks (like the `worker` service above via the `public` network).
 
 ## Service discovery
 
