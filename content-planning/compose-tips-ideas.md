@@ -70,10 +70,10 @@
 - **Wed**: Using `tmpfs` for ephemeral storage (Performance)
 - **Fri**: Using `extra_hosts` for custom DNS entries (Networking)
 
-### Week 10 (Mar 9-13) - Mixed Themes
-- **Mon**: Health check patterns and debugging (Runtime)
-- **Wed**: Understanding container exit codes (Debugging)
-- **Fri**: Compose in CI/CD pipelines (DevOps)
+### Week 10 (Mar 9-13) - Configuration Deep Dive - READY ✅
+- **Mon**: Understanding include, extends, and override files (Configuration)
+- **Wed**: When to use include vs extends vs overrides (Configuration)
+- **Fri**: Combining include, extends, and overrides together (Configuration)
 
 ### Week 11 (Mar 16-20) - Mixed Themes
 - **Mon**: Using labels for service organization and monitoring (Configuration)

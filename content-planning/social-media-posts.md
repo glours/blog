@@ -872,7 +872,7 @@ Speed up your stack: lours.me/posts/compose-tip-035-tmpfs-storage/
 
 ---
 
-### Friday, Mar 6 - Extra Hosts
+### Friday, Mar 6 - Extra Hosts (Tip #36)
 
 **🦋 Bluesky:**
 ```
@@ -916,4 +916,132 @@ Use cases:
 No system file changes needed: lours.me/posts/compose-tip-036-extra-hosts/
 
 #Docker #DockerCompose #Networking #DNS #Development
+```
+
+---
+
+## Week 10: March 9-13, 2026
+
+### Monday, Mar 9 - Understanding include, extends, and override files (Tip #37)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #37
+
+3 ways to split Compose configs — each works differently!
+
+Override files → project-level merge
+extends → service-level inheritance
+include → isolated sub-project import
+
+Know which to reach for!
+
+Guide: lours.me/posts/compose-tip-037-include-extends-overrides/
+
+#Docker #Configuration #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #37: Understanding include, extends, and override files
+
+Three mechanisms, three different scopes!
+
+Override files → merge at project level (all services)
+extends → a service inherits from another service definition
+include → import a self-contained sub-project in isolation
+
+Key difference with include: the imported file is parsed with its own working directory and .env file — it can't see or override the parent's services.
+
+Full breakdown: lours.me/posts/compose-tip-037-include-extends-overrides/
+
+Watch the deep dive: youtu.be/VOyyGX1MOU0
+
+#Docker #DockerCompose #Configuration #Architecture #DevOps
+```
+
+---
+
+### Wednesday, Mar 11 - When to use include vs extends vs overrides (Tip #38)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #38
+
+Which one to use?
+
+Adapting per environment? → Override files
+Sharing base config across services? → extends
+Importing a self-contained stack? → include
+
+Simple decision guide inside!
+
+Guide: lours.me/posts/compose-tip-038-when-to-use-which/
+
+#Docker #Configuration #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #38: When to use include vs extends vs overrides
+
+A practical decision guide:
+
+Override files → dev vs prod differences, local developer customizations, CI tweaks
+extends → common restart policies, logging, labels shared across services
+include → monitoring stacks, database stacks, reusable service libraries
+
+Quick rule of thumb:
+• Adapting existing services? Override files
+• DRY service config? extends
+• Importing a group of services? include
+
+Full guide: lours.me/posts/compose-tip-038-when-to-use-which/
+
+Watch the deep dive: youtu.be/VOyyGX1MOU0
+
+#Docker #DockerCompose #Configuration #BestPractices #DevOps
+```
+
+---
+
+### Friday, Mar 13 - Combining include, extends, and overrides (Tip #39)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #39
+
+Use all 3 together for a clean setup!
+
+include → reusable infra stacks
+extends → DRY service config
+Override files → environment differences
+
+Each handles its own concern. Change one without touching the others!
+
+Guide: lours.me/posts/compose-tip-039-combining-include-extends-overrides/
+
+#Docker #Configuration #Architecture
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #39: Combining include, extends, and overrides
+
+The real power comes from using all three together:
+
+include: infra stacks (database, monitoring) are isolated and reusable across projects
+extends: service config (logging, labels, restart) is DRY and consistent
+Override files: environment differences are explicit and targeted
+
+Result:
+• Change logging config? → update base/service-base.yml once
+• Swap database stack? → replace one include line
+• Adjust dev ports? → edit compose.override.yml, nothing else changes
+
+Full walkthrough: lours.me/posts/compose-tip-039-combining-include-extends-overrides/
+
+Watch the deep dive: youtu.be/VOyyGX1MOU0
+
+#Docker #DockerCompose #Configuration #Architecture #DevOps
 ```
