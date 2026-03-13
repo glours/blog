@@ -75,10 +75,10 @@
 - **Wed**: When to use include vs extends vs overrides (Configuration)
 - **Fri**: Combining include, extends, and overrides together (Configuration)
 
-### Week 11 (Mar 16-20) - Mixed Themes
+### Week 11 (Mar 16-20) - Mixed Themes - READY ✅
 - **Mon**: Using labels for service organization and monitoring (Configuration)
 - **Wed**: Container lifecycle hooks (Runtime)
-- **Fri**: Managing log drivers and options (Debugging)
+- **Fri**: Variable substitution and defaults (Configuration)
 
 ---
 
