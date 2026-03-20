@@ -424,3 +424,164 @@ Full guide: lours.me/posts/compose-tip-042-variable-substitution/
 
 #Docker #DockerCompose #Configuration #BestPractices #DevOps
 ```
+
+---
+
+## Week 12: March 23-27, 2026
+
+### Monday, Mar 23 - Read-only root filesystems (Tip #43)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #43
+
+Harden containers in one line!
+
+read_only: true
+tmpfs:
+  - /tmp:size=50M
+
+Immutable filesystem + writable only where needed.
+
+Guide: lours.me/posts/compose-tip-043-read-only-rootfs/
+
+#Docker #Security #Containers
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #43: Read-only root filesystems
+
+One of the simplest and most effective hardening measures!
+
+```yaml
+services:
+  app:
+    image: myapp
+    read_only: true
+    tmpfs:
+      - /tmp:size=50M
+      - /var/run:size=10M
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+```
+
+Why it matters:
+• Prevents attackers from modifying binaries
+• No malicious files can be dropped
+• Combined with tmpfs for writable paths
+• Works great with capability dropping
+• Simple to enable, huge security win
+
+Harden your containers: lours.me/posts/compose-tip-043-read-only-rootfs/
+
+#Docker #DockerCompose #Security #DevSecOps #Containers
+```
+
+---
+
+### Wednesday, Mar 25 - Signal handling in containers (Tip #44)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #44
+
+Graceful shutdowns need the right signal!
+
+stop_signal: SIGQUIT
+stop_grace_period: 30s
+init: true
+
+Control what happens when you stop.
+
+Guide: lours.me/posts/compose-tip-044-signal-handling/
+
+#Docker #Runtime #Containers
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #44: Signal handling in containers
+
+Control how your containers shut down gracefully!
+
+```yaml
+services:
+  nginx:
+    stop_signal: SIGQUIT    # Graceful shutdown
+    stop_grace_period: 30s
+
+  worker:
+    init: true              # Proper signal forwarding
+    stop_grace_period: 120s # Time for long jobs
+```
+
+Key concepts:
+• SIGTERM is sent by default, then SIGKILL after timeout
+• stop_signal changes which signal is sent
+• stop_grace_period controls the timeout
+• init: true fixes the PID 1 signal forwarding problem
+• Combine with pre_stop hooks for maximum control
+
+Shut down cleanly: lours.me/posts/compose-tip-044-signal-handling/
+
+#Docker #DockerCompose #Runtime #Containers #DevOps
+```
+
+---
+
+### Friday, Mar 27 - Multi-stage builds with target (Tip #45)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #45
+
+One Dockerfile, multiple targets!
+
+build:
+  context: .
+  target: dev    # or production
+
+Different images for dev and prod from the same file.
+
+Guide: lours.me/posts/compose-tip-045-multi-stage-target/
+
+#Docker #Build #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #45: Multi-stage builds with target
+
+Build different images from the same Dockerfile!
+
+```yaml
+# compose.yml
+services:
+  app:
+    build:
+      context: .
+      target: production
+
+# compose.override.yml (local dev)
+services:
+  app:
+    build:
+      target: dev
+    volumes:
+      - .:/app
+```
+
+Use cases:
+• Dev stage with hot reload and debug tools
+• Production stage minimal and optimized
+• Test stage with test dependencies included
+• Multiple services from one Dockerfile
+• Override files to switch targets per environment
+
+One Dockerfile, many uses: lours.me/posts/compose-tip-045-multi-stage-target/
+
+#Docker #DockerCompose #Build #CICD #DevOps
+```

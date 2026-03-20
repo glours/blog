@@ -80,6 +80,11 @@
 - **Wed**: Container lifecycle hooks (Runtime)
 - **Fri**: Variable substitution and defaults (Configuration)
 
+### Week 12 (Mar 23-27) - Mixed Themes - READY ✅
+- **Mon**: Read-only root filesystems (Security)
+- **Wed**: Signal handling in containers (Runtime)
+- **Fri**: Multi-stage builds with `target` (Build)
+
 ---
 
 ## Future Topic Ideas
