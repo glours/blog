@@ -585,3 +585,150 @@ One Dockerfile, many uses: lours.me/posts/compose-tip-045-multi-stage-target/
 
 #Docker #DockerCompose #Build #CICD #DevOps
 ```
+
+---
+
+## Week 13: March 30 - April 3, 2026
+
+### Monday, Mar 30 - Build args vs environment variables (Tip #46)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #46
+
+Build args vs env vars — different times, different jobs!
+
+build.args → build time only (ARG)
+environment → runtime only (ENV)
+
+Don't mix them up! And never put secrets in build args.
+
+Guide: lours.me/posts/compose-tip-046-build-args-vs-env/
+
+#Docker #Build #Configuration
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #46: Build args vs environment variables
+
+Two ways to pass values — but they work at completely different times!
+
+```yaml
+services:
+  app:
+    build:
+      args:
+        NODE_VERSION: "20"    # Build time only
+    environment:
+      DATABASE_URL: postgres://db/myapp  # Runtime only
+```
+
+Key differences:
+• Build args → available during docker build (ARG in Dockerfile)
+• Environment → available in running container (ENV)
+• Build args are visible in image history — never use for secrets!
+• Need both? Use ARG + ENV in your Dockerfile
+
+Know when to use which: lours.me/posts/compose-tip-046-build-args-vs-env/
+
+#Docker #DockerCompose #Build #Configuration #DevOps
+```
+
+---
+
+### Wednesday, Apr 1 - Sidecar container patterns (Tip #47)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #47
+
+Sidecars with Compose-native features!
+
+network_mode: service:app  # Share network
+volumes_from: app:ro       # Share volumes
+
+TLS proxy, log forwarding, pod-like patterns.
+
+Guide: lours.me/posts/compose-tip-047-sidecar-patterns/
+
+#Docker #Architecture #Patterns
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #47: Sidecar container patterns
+
+Add capabilities without modifying your application — using Compose-native features!
+
+```yaml
+services:
+  app:
+    image: myapp
+
+  proxy:
+    image: nginx
+    network_mode: service:app  # Shared network namespace
+    volumes_from:
+      - app:ro                 # Access app's volumes
+```
+
+Key Compose sidecar features:
+• network_mode: service:<name> — share localhost with another container
+• volumes_from — mount all volumes from another service
+• Combine both for Kubernetes pod-like patterns
+• depends_on with healthcheck for startup ordering
+
+Full patterns: lours.me/posts/compose-tip-047-sidecar-patterns/
+
+#Docker #DockerCompose #Architecture #Patterns #DevOps
+```
+
+---
+
+### Friday, Apr 3 - Network debugging with docker compose port (Tip #48)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #48
+
+Which host port maps to your container?
+
+docker compose port web 80
+→ 0.0.0.0:8080
+
+Works with scaled services too — use --index!
+
+Guide: lours.me/posts/compose-tip-048-network-debugging-port/
+
+#Docker #Debugging #Networking
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #48: Network debugging with docker compose port
+
+Find out exactly which host port maps to a container port!
+
+```bash
+docker compose port web 80
+# → 0.0.0.0:8080
+
+# With scaled services
+docker compose up -d --scale web=3
+docker compose port --index=1 web 80
+docker compose port --index=2 web 80
+```
+
+Especially useful when:
+• Using dynamic port mapping (ports: ["80"])
+• Running scaled services with --index
+• Querying UDP ports with --protocol
+
+Quick overview of all mappings:
+docker compose ps --format "table {{.Name}}\t{{.Ports}}"
+
+Full guide: lours.me/posts/compose-tip-048-network-debugging-port/
+
+#Docker #DockerCompose #Debugging #Networking #DevOps
+```

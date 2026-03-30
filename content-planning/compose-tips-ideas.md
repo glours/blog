@@ -85,6 +85,13 @@
 - **Wed**: Signal handling in containers (Runtime)
 - **Fri**: Multi-stage builds with `target` (Build)
 
+## Month 4 - April 2026
+
+### Week 13 (Mar 30 - Apr 3) - Mixed Themes - READY ✅
+- **Mon**: Build args vs environment variables (Build)
+- **Wed**: Sidecar container patterns (Advanced)
+- **Fri**: Network debugging with `docker compose port` (Debugging)
+
 ---
 
 ## Future Topic Ideas
