@@ -92,6 +92,11 @@
 - **Wed**: Sidecar container patterns (Advanced)
 - **Fri**: Network debugging with `docker compose port` (Debugging)
 
+### Week 14 (Apr 6-10) - Mixed Themes - READY ✅
+- **Mon**: Mixed platforms — Linux containers and Wasm with `platform` and `runtime` (Advanced)
+- **Wed**: GPU support with `deploy.resources.reservations.devices` (Runtime)
+- **Fri**: `docker compose up --wait` for scripting and CI (DevOps)
+
 ---
 
 ## Future Topic Ideas
