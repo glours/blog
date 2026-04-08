@@ -5,9 +5,10 @@ on:
   push:
     branches: ["main"]
 
-  # Run daily at 9:00 AM CET (8:00 UTC) to publish scheduled posts
+  # Run daily at 7:00 AM CET (6:00 UTC) to publish scheduled posts around 9:00 AM CET
+  # GitHub Actions scheduled workflows typically run 1-2 hours late due to queue congestion
   schedule:
-    - cron: '0 8 * * *'
+    - cron: '0 6 * * *'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
