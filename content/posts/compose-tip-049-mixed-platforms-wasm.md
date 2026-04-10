@@ -121,4 +121,4 @@ To run Wasm workloads with Docker Desktop, enable the Wasm integration in Settin
 
 - [Compose specification: platform](https://docs.docker.com/reference/compose-file/services/#platform)
 - [Compose specification: runtime](https://docs.docker.com/reference/compose-file/services/#runtime)
-- [Docker and Wasm](https://docs.docker.com/wasm/)
+- [Docker and Wasm](https://docs.docker.com/desktop/features/wasm/)
