@@ -97,6 +97,11 @@
 - **Wed**: GPU support with `deploy.resources.reservations.devices` (Runtime)
 - **Fri**: `docker compose up --wait` for scripting and CI (DevOps)
 
+### Week 15 (Apr 13-17) - Mixed Themes - READY ✅
+- **Mon**: Setting up a CI test environment with Compose (DevOps)
+- **Wed**: Compose project name and working directory control (Configuration)
+- **Fri**: `docker compose --dry-run` to preview changes (Debugging)
+
 ---
 
 ## Future Topic Ideas

@@ -304,3 +304,156 @@ Reliable CI pipelines: lours.me/posts/compose-tip-051-up-wait/
 
 #Docker #DockerCompose #CICD #Testing #DevOps
 ```
+
+---
+
+## Week 15: April 13-17, 2026
+
+### Monday, Apr 13 - CI test environment with Compose (Tip #52)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #52
+
+Dedicated CI test environment with Compose!
+
+compose.ci.yml override:
+- Seeded database
+- Test runner service
+- Clean teardown with --volumes
+
+docker compose -f compose.yml -f compose.ci.yml up --exit-code-from tests
+
+Guide: lours.me/posts/compose-tip-052-ci-test-environment/
+
+#Docker #CICD #Testing
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #52: Setting up a CI test environment
+
+Your dev Compose file isn't your CI Compose file!
+
+```bash
+docker compose -f compose.yml -f compose.ci.yml up \
+  --build --exit-code-from tests
+
+docker compose down --volumes
+```
+
+The CI override adds:
+• Database seeded with test fixtures via init scripts
+• Test runner service with depends_on healthchecks
+• No persistent volumes — fresh state every run
+• Frontend disabled via profiles when not needed
+
+Real example using dockersamples/sbx-quickstart!
+
+Full setup: lours.me/posts/compose-tip-052-ci-test-environment/
+
+#Docker #DockerCompose #CICD #Testing #DevOps
+```
+
+---
+
+### Wednesday, Apr 15 - Project name and working directory (Tip #53)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #53
+
+Control your project name!
+
+name: myapp-${ENV:-dev}
+
+Avoid conflicts, run multiple instances, keep things clean.
+
+docker compose ls  # See all projects
+
+Guide: lours.me/posts/compose-tip-053-project-name-workdir/
+
+#Docker #Configuration #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #53: Compose project name and working directory
+
+Every Compose stack gets a project name — it prefixes all your resources.
+
+```yaml
+name: myapp-${ENV:-dev}
+services:
+  web:
+    image: nginx
+```
+
+Three ways to set it (in order of precedence):
+• -p flag: docker compose -p myproject up
+• Environment: COMPOSE_PROJECT_NAME=myproject
+• In the file: name: myproject (recommended)
+
+Use cases:
+• Run staging and production side by side
+• Isolate parallel CI runs with -p "ci-${BUILD_ID}"
+• Consistent naming across the team
+
+List all projects: docker compose ls
+
+Full guide: lours.me/posts/compose-tip-053-project-name-workdir/
+
+#Docker #DockerCompose #Configuration #DevOps #BestPractices
+```
+
+---
+
+### Friday, Apr 17 - Preview changes with --dry-run (Tip #54)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #54
+
+Not sure what will happen?
+
+docker compose up --dry-run
+
+See the plan before executing. Works with up, down, rm, pull, restart.
+
+No surprises!
+
+Guide: lours.me/posts/compose-tip-054-dry-run/
+
+#Docker #Debugging #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #54: Preview changes with --dry-run
+
+See what Compose will do before it does it!
+
+```bash
+docker compose up -d --dry-run
+```
+
+```
+DRY-RUN MODE - Container myapp-db-1  Running
+DRY-RUN MODE - Container myapp-web-1 Recreating
+DRY-RUN MODE - Container myapp-web-1 Recreated
+```
+
+Works with many commands:
+• docker compose down --dry-run
+• docker compose rm --dry-run
+• docker compose pull --dry-run
+
+Perfect for:
+• Checking what changed after editing compose.yml
+• Validating override files before applying
+• Safe exploration in unfamiliar environments
+
+Full guide: lours.me/posts/compose-tip-054-dry-run/
+
+#Docker #DockerCompose #Debugging #BestPractices #DevOps
+```
