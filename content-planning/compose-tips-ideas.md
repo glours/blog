@@ -102,6 +102,15 @@
 - **Wed**: Compose project name and working directory control (Configuration)
 - **Fri**: `docker compose --dry-run` to preview changes (Debugging)
 
+### Week 16 (Apr 20-24) - NO TIPS WEEK
+- Devoxx France 2026 conference
+- Announcement post published Monday linking to talk details
+
+### Week 17 (Apr 27 - May 1) - Mixed Themes - READY ✅
+- **Mon**: `docker compose config` advanced usage (Configuration)
+- **Wed**: `env_file` advanced patterns (Configuration)
+- **Fri**: Container resource monitoring with `top` and `stats` (Debugging)
+
 ---
 
 ## Future Topic Ideas

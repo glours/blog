@@ -502,3 +502,162 @@ Come say hi! Tips will be back the week after.
 
 #DevoxxFR #Docker #DockerCompose #AI
 ```
+
+---
+
+## Week 17: April 27 - May 1, 2026
+
+### Monday, Apr 27 - docker compose config advanced usage (Tip #55)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #55
+
+docker compose config is more than validation!
+
+--services  # List all services
+--hash='*'  # Detect config changes
+--resolve-image-digests  # Pin images
+--format json  # Pipe to jq
+
+Guide: lours.me/posts/compose-tip-055-config-advanced/
+
+#Docker #Debugging #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #55: docker compose config advanced usage
+
+Most people use it for validation. It does much more!
+
+```bash
+# List resources
+docker compose config --services
+docker compose config --volumes
+docker compose config --profiles
+
+# Change detection for CI caching
+docker compose config --hash='*'
+
+# Pin image digests for production
+docker compose config --resolve-image-digests > compose.resolved.yml
+
+# JSON for jq
+docker compose config --format json | jq '.services.web.environment'
+```
+
+Useful for:
+• Scripting — loop over services
+• CI caching — detect config changes with hashes
+• Reproducible deploys — pin image digests
+• Debugging — see raw vs interpolated config
+
+Full guide: lours.me/posts/compose-tip-055-config-advanced/
+
+#Docker #DockerCompose #Debugging #DevOps #BestPractices
+```
+
+---
+
+### Wednesday, Apr 29 - env_file advanced patterns (Tip #56)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #56
+
+env_file has more than you think!
+
+env_file:
+  - .env.common
+  - path: .env.local
+    required: false
+
+Multiple files, optional loading, interpolation.
+
+Guide: lours.me/posts/compose-tip-056-env-file-advanced/
+
+#Docker #Configuration #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #56: env_file advanced patterns
+
+A single .env file is just the start!
+
+```yaml
+services:
+  app:
+    env_file:
+      - .env.common               # Shared defaults
+      - .env.${ENV:-dev}          # Environment-specific
+      - path: .env.local          # Optional local tweaks
+        required: false
+    environment:
+      LOG_LEVEL: debug            # This wins over env_file
+```
+
+Key patterns:
+• Multiple files — later overrides earlier
+• required: false — optional files don't break Compose
+• Interpolation — use ${VAR} from host/.env inside env files
+• environment > env_file — direct env vars always win
+
+Perfect for multi-environment setups with shared defaults and local overrides.
+
+Full guide: lours.me/posts/compose-tip-056-env-file-advanced/
+
+#Docker #DockerCompose #Configuration #BestPractices #DevOps
+```
+
+---
+
+### Friday, May 1 - Container resource monitoring (Tip #57)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #57
+
+Something feels slow?
+
+docker compose top    # Processes per service
+docker compose stats  # Live CPU/memory/IO
+
+Auto-scoped to your current project. Quick debugging for resource issues.
+
+Guide: lours.me/posts/compose-tip-057-resource-monitoring/
+
+#Docker #Debugging #Monitoring
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #57: Container resource monitoring
+
+When your stack feels slow, these two commands tell you why!
+
+```bash
+# What's running inside each service?
+docker compose top
+
+# Live CPU, memory, network, disk I/O (scoped to your project)
+docker compose stats
+
+# Snapshot with custom columns
+docker compose stats --no-stream \
+  --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemPerc}}"
+```
+
+Quick debugging workflow:
+1. docker compose ps — what's running
+2. docker compose stats --no-stream — resource usage snapshot
+3. docker compose top <service> — processes in the hot service
+4. docker compose events --since 5m — recent restarts/OOMs
+
+Bonus: docker compose stats is auto-scoped to your project, no manual filtering needed.
+
+Full guide: lours.me/posts/compose-tip-057-resource-monitoring/
+
+#Docker #DockerCompose #Debugging #Monitoring #DevOps
+```

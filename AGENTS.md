@@ -120,6 +120,17 @@ UseHugoToc: false
 - **Concrete Examples**: Use real numbers and actual scenarios
 - **Practical Focus**: Share what works in production, not theory
 
+#### Sanity Checks for Blog Posts
+
+Before declaring a post ready, always run these checks:
+
+1. **YAML validation**: Test every YAML example with `docker compose -f <file> config`
+2. **Link verification**: Check all links in the post
+   - External links: verify HTTP status returns 200 (e.g., `curl -sL -o /dev/null -w "%{http_code}" <url>`)
+   - Internal links (`/posts/...`): confirm the target file exists in `content/posts/`
+3. **Image references**: Only use official images or trusted publishers (CNCF projects, official Docker images, Docker Hardened Images). Never use personal/untrusted images as recommended examples.
+4. **Command accuracy**: Prefer `docker compose <command>` over `docker <command>` when a Compose equivalent exists (e.g., `docker compose stats`, `docker compose ps --filter`, not the non-Compose versions).
+
 ### Common Tasks
 
 #### Creating a New Blog Post
