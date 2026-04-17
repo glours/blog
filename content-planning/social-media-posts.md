@@ -457,3 +457,48 @@ Full guide: lours.me/posts/compose-tip-054-dry-run/
 
 #Docker #DockerCompose #Debugging #BestPractices #DevOps
 ```
+
+---
+
+## Week 16: April 20-24, 2026 - NO TIPS (Devoxx France)
+
+### Monday, Apr 20 - Devoxx France announcement
+
+**🦋 Bluesky:**
+```
+🐳 🐙 No Compose tips this week — I'm at Devoxx France! (Apr 22-24)
+
+3 talks to catch me on stage:
+🔐 Wed 17:50 - YOLO coding agents, safely
+🐉 Thu 13:30 - Compose & Dragons (Tiny LLMs RPG)
+🤖 Fri 11:35 - Compose for AI & Cloud
+
+Full details: lours.me/posts/devoxx-france-2026/
+
+#DevoxxFR #Docker
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 No Docker Compose tips this week — I'm at Devoxx France 2026!
+
+If you're attending April 22-24 at the Palais des Congrès in Paris, catch me on stage for 3 sessions:
+
+🔐 Wednesday, April 22 — 17:50-18:20 (Tools-in-Action)
+"Vos coding agents en mode YOLO... mais en toute sécurité"
+Docker Sandboxes: running AI coding agents autonomously without compromising your dev machine.
+
+🐉 Thursday, April 23 — 13:30-16:30 (3H Deep Dive, with Philippe Charrière)
+"Compose & Dragons: le jeu de rôle des agents nourris aux Tiny Language Models"
+Building a text-based dungeon crawler RPG powered by very small LLMs (<4B params).
+
+🤖 Friday, April 24 — 11:35-12:20 (Conference, with Nicolas De Loof)
+"Docker Compose, votre Dev Toolkit pour AI & Cloud"
+New Compose features for LLM-based apps: models section, provider services, and Docker Offload for GPU workloads.
+
+Full abstracts and session links: lours.me/posts/devoxx-france-2026/
+
+Come say hi! Tips will be back the week after.
+
+#DevoxxFR #Docker #DockerCompose #AI
+```
