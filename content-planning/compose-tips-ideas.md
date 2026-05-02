@@ -111,6 +111,13 @@
 - **Wed**: `env_file` advanced patterns (Configuration)
 - **Fri**: Container resource monitoring with `top` and `stats` (Debugging)
 
+## Month 5 - May 2026
+
+### Week 18 (May 4-8) - Mixed Themes - READY ✅
+- **Mon**: Compose `configs` for config files (Configuration)
+- **Wed**: `entrypoint` vs `command` (Runtime)
+- **Fri**: Compose `models` section for LLMs (AI/Configuration)
+
 ---
 
 ## Future Topic Ideas
