@@ -118,6 +118,11 @@
 - **Wed**: `entrypoint` vs `command` (Runtime)
 - **Fri**: Compose `models` section for LLMs (AI/Configuration)
 
+### Week 19 (May 11-15) - Mixed Themes - READY ✅
+- **Mon**: Compose `provider` services (AI/Configuration)
+- **Wed**: Network aliases for service routing (Networking)
+- **Fri**: `ulimits` and `shm_size` runtime tuning (Runtime)
+
 ---
 
 ## Future Topic Ideas

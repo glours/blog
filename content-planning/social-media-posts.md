@@ -182,3 +182,176 @@ Full guide: lours.me/posts/compose-tip-060-models-section/
 
 #Docker #DockerCompose #AI #LLM #GenerativeAI
 ```
+
+---
+
+## Week 19: May 11-15, 2026
+
+### Monday, May 11 - Compose provider services (Tip #61)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #61
+
+Beyond containers: provider services!
+
+services:
+  tunnel:
+    provider:
+      type: telepresence
+      options:
+        namespace: avatars
+        service: api
+
+Manage Kubernetes intercepts, managed DBs, VPN tunnels, all in compose.yml.
+
+Guide: lours.me/posts/compose-tip-061-provider-services/
+
+#Docker #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #61: Provider services for non-container dependencies
+
+Not everything in your stack is a container. Compose 2.36 introduced provider services to manage external dependencies declaratively!
+
+```yaml
+services:
+  api:
+    image: my-api:latest
+
+  tunnel:
+    provider:
+      type: telepresence
+      options:
+        namespace: avatars
+        service: api
+        port: 5732:api-80
+```
+
+Use cases:
+• Kubernetes traffic intercepts (Telepresence)
+• Managed databases (RDS provisioning)
+• VPN tunnels (wireguard, OpenVPN)
+• SaaS APIs with auth setup
+• Message queues
+• Any external resource that needs lifecycle management
+
+How it works:
+• provider.type points to a binary in your $PATH
+• Compose calls it on up and down
+• Provider publishes env vars to dependent services via JSON
+
+Want to write your own? Reference implementation in Go: github.com/glours/compose-telepresence-plugin
+
+Full guide: lours.me/posts/compose-tip-061-provider-services/
+
+#Docker #DockerCompose #DevOps #Kubernetes #BestPractices
+```
+
+---
+
+### Wednesday, May 13 - Network aliases (Tip #62)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #62
+
+One service, multiple hostnames!
+
+networks:
+  app-net:
+    aliases:
+      - db
+      - database
+      - postgres-primary
+
+Perfect for migrations and legacy clients.
+
+Guide: lours.me/posts/compose-tip-062-network-aliases/
+
+#Docker #Networking
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #62: Network aliases for service routing
+
+Give a service multiple hostnames on a network!
+
+```yaml
+services:
+  identity:
+    image: identity:v2
+    networks:
+      app-net:
+        aliases:
+          - auth-service   # Old name kept as alias
+```
+
+Use cases:
+• Migrate service names without breaking existing clients
+• Different aliases per network (public vs internal)
+• Drop-in replacements with profiles
+• Multiple semantic names for one service
+
+Don't confuse with extra_hosts (Tip #36):
+• aliases — adds hostnames FOR a service that other containers can reach
+• extra_hosts — adds entries to a container's /etc/hosts for EXTERNAL hostnames
+
+Full guide: lours.me/posts/compose-tip-062-network-aliases/
+
+#Docker #DockerCompose #Networking #DevOps
+```
+
+---
+
+### Friday, May 15 - ulimits and shm_size (Tip #63)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #63
+
+Beyond CPU/memory limits!
+
+ulimits:
+  nofile: 65536
+
+shm_size: 2gb
+
+For Chrome, PyTorch, high-concurrency servers.
+
+Guide: lours.me/posts/compose-tip-063-ulimits-shm-size/
+
+#Docker #Performance
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #63: Tuning containers with ulimits and shm_size
+
+Two settings that solve specific runtime problems!
+
+```yaml
+services:
+  scraper:
+    image: chrome-headless
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    shm_size: 2gb
+```
+
+When you need them:
+• ulimits/nofile: high-concurrency servers (nginx, Node.js) hitting "Too many open files"
+• shm_size: Chrome/Puppeteer (defaults to 64MB and crashes), PyTorch DataLoaders, busy PostgreSQL
+• ulimits/nproc: apps that fork heavily
+
+These complement CPU/memory limits (Tip #16): one caps the resources Docker hands out, the other configures how the container uses them.
+
+Full guide: lours.me/posts/compose-tip-063-ulimits-shm-size/
+
+#Docker #DockerCompose #Performance #Runtime #DevOps
+```
