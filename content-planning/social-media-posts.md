@@ -355,3 +355,180 @@ Full guide: lours.me/posts/compose-tip-063-ulimits-shm-size/
 
 #Docker #DockerCompose #Performance #Runtime #DevOps
 ```
+
+---
+
+## Week 20: May 18-22, 2026
+
+### Monday, May 18 - docker compose cp (Tip #64)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #64
+
+Need to grab a log out of a container?
+
+docker compose cp app:/var/log/app/error.log ./error.log
+
+Push a config in the other way:
+docker compose cp ./nginx.conf web:/etc/nginx/nginx.conf
+
+One-shot file copy, no volume needed.
+
+Guide: lours.me/posts/compose-tip-064-compose-cp/
+
+#Docker #CLI #Debugging
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #64: Copying files with docker compose cp
+
+When you need a one-off file transfer between host and container, no volume required.
+
+```bash
+# Out of the container
+docker compose cp app:/var/log/app/error.log ./error.log
+
+# Into the container
+docker compose cp ./nginx-debug.conf web:/etc/nginx/nginx.conf
+
+# Target a specific replica
+docker compose cp --index=2 worker:/var/log/worker.log ./worker-2.log
+```
+
+Common uses:
+• Pull logs or build artifacts for offline analysis
+• Push a quick config tweak without rebuilding
+• Seed test data into a database container
+• Extract coredumps for debugging
+
+For persistent file sharing, use volumes or configs (Tip #58). cp is for snapshots in time.
+
+Full guide: lours.me/posts/compose-tip-064-compose-cp/
+
+#Docker #DockerCompose #CLI #Debugging #DevOps
+```
+
+---
+
+### Wednesday, May 20 - DNS config (Tip #65)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #65
+
+Custom DNS in your containers!
+
+dns:
+  - 1.1.1.1
+dns_search:
+  - corp.example.com
+dns_opt:
+  - "ndots:2"
+
+Different from extra_hosts (Tip #36) which edits /etc/hosts.
+
+Guide: lours.me/posts/compose-tip-065-dns-config/
+
+#Docker #Networking #DNS
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #65: Custom DNS configuration with dns and dns_search
+
+Three directives, full control over container DNS resolution!
+
+```yaml
+services:
+  dev-app:
+    image: myapp
+    dns:
+      - 10.0.0.1            # Corporate DNS via VPN
+      - 1.1.1.1             # Public fallback
+    dns_search:
+      - corp.example.com
+    dns_opt:
+      - "ndots:1"
+      - "timeout:2"
+```
+
+What each does:
+• dns: which resolver servers to query
+• dns_search: search domains for short names
+• dns_opt: resolver tuning (ndots, timeout, attempts)
+
+Common use cases: corporate DNS through VPN, Pi-hole, NextDNS, internal hostname resolution.
+
+Don't confuse with extra_hosts (Tip #36):
+• dns: changes the resolver
+• extra_hosts: pins specific hostnames in /etc/hosts
+
+Full guide: lours.me/posts/compose-tip-065-dns-config/
+
+#Docker #DockerCompose #Networking #DNS #DevOps
+```
+
+---
+
+### Friday, May 22 - Volume drivers with NFS (Tip #66)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #66
+
+NFS volumes in one declaration!
+
+volumes:
+  shared:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=nfs.example.com,rw,nfsvers=4"
+      device: ":/exports/shared"
+
+Shared storage across hosts.
+
+Guide: lours.me/posts/compose-tip-066-volume-drivers-nfs/
+
+#Docker #Storage
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #66: Volume drivers with NFS
+
+Compose volumes go beyond local disk! The built-in local driver supports NFS out of the box.
+
+```yaml
+volumes:
+  shared:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=nfs-server.example.com,rw,nfsvers=4"
+      device: ":/exports/shared"
+
+services:
+  app:
+    image: myapp
+    volumes:
+      - shared:/data
+```
+
+Use cases:
+• Multi-host shared storage
+• Static assets served by multiple web containers
+• Backup destinations off the host
+• Sharing data with non-Docker systems
+
+Common options to know:
+• addr=<server>, nfsvers=4, ro/rw, hard/soft, timeo=N
+
+For cloud storage (EBS, EFS, Azure Disk), use a plugin driver instead. The same volume mechanism works for both.
+
+Full guide: lours.me/posts/compose-tip-066-volume-drivers-nfs/
+
+#Docker #DockerCompose #Storage #NFS #DevOps
+```

@@ -123,6 +123,11 @@
 - **Wed**: Network aliases for service routing (Networking)
 - **Fri**: `ulimits` and `shm_size` runtime tuning (Runtime)
 
+### Week 20 (May 18-22) - Mixed Themes - READY ✅
+- **Mon**: `docker compose cp` for file copy between host and container (CLI/Debugging)
+- **Wed**: DNS config with `dns:` and `dns_search:` (Networking)
+- **Fri**: Volume drivers with NFS example (Storage)
+
 ---
 
 ## Future Topic Ideas
