@@ -532,3 +532,161 @@ Full guide: lours.me/posts/compose-tip-066-volume-drivers-nfs/
 
 #Docker #DockerCompose #Storage #NFS #DevOps
 ```
+
+---
+
+## Week 21: May 25-29, 2026
+
+### Monday, May 25 - pull_policy (Tip #67)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #67
+
+Control when Compose pulls images!
+
+pull_policy: always   # every up
+pull_policy: never    # CI: fail if missing
+pull_policy: build    # force local build
+pull_policy: daily    # refresh once a day
+
+Match the policy to your tag.
+
+Guide: lours.me/posts/compose-tip-067-pull-policy/
+
+#Docker #Build
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #67: Controlling image pulls with pull_policy
+
+Decide exactly when Compose pulls from a registry!
+
+```yaml
+services:
+  api:
+    image: myregistry/api:latest
+    pull_policy: always
+```
+
+Available policies:
+• missing (default): pull only if not local (latest tag is always pulled!)
+• always: pull on every up
+• never: don't pull, fail if missing (great for CI)
+• build: force build over pull, rebuild even if image is present
+• daily / weekly: periodic refresh without the cost of always
+• every_<duration>: fine-grained refresh (e.g. every_12h, every_1h30m)
+
+CLI override: docker compose up --pull always|missing|never
+
+Match the policy to how often the underlying tag is expected to move.
+
+Full guide: lours.me/posts/compose-tip-067-pull-policy/
+
+#Docker #DockerCompose #Build #DevOps #CICD
+```
+
+---
+
+### Wednesday, May 27 - docker compose wait (Tip #68)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #68
+
+docker compose wait waits for service exit!
+
+Different from up --wait (Tip #51) which waits for healthy.
+
+Perfect for migrations, test runners, batch jobs.
+
+Propagates exit code in CI.
+
+Guide: lours.me/posts/compose-tip-068-compose-wait/
+
+#Docker #CICD
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #68: Waiting for service exit with docker compose wait
+
+Different from up --wait (Tip #51): wait blocks until services EXIT, not until they're healthy!
+
+```bash
+# Start the stack and wait for everything to be healthy
+docker compose up -d --wait --wait-timeout 60
+
+# Run the test suite, then wait for it to finish
+docker compose up -d tests
+docker compose wait tests
+TESTS_EXIT=$?
+
+docker compose down --volumes
+exit $TESTS_EXIT
+```
+
+When to use each:
+• up --wait: wait for services to be ready to serve (healthchecks pass)
+• wait: wait for one-shot services to finish (migrations, tests, batch jobs)
+
+Multiple services: docker compose wait migrate seeder (waits for ALL to exit)
+
+Full guide: lours.me/posts/compose-tip-068-compose-wait/
+
+#Docker #DockerCompose #CICD #Testing #DevOps
+```
+
+---
+
+### Friday, May 29 - pid and ipc namespace sharing (Tip #69)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #69
+
+Share namespaces between containers!
+
+debugger:
+  pid: service:app
+  cap_add: [SYS_PTRACE]
+
+Attach strace/gdb to a running service without baking debug tools in.
+
+Guide: lours.me/posts/compose-tip-069-pid-ipc/
+
+#Docker #Debugging
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #69: Sharing namespaces with pid and ipc
+
+Two containers, one PID or IPC namespace. The escape hatch from default isolation!
+
+```yaml
+services:
+  app:
+    image: myapp
+
+  debugger:
+    image: alpine
+    pid: service:app          # See app's processes
+    cap_add:
+      - SYS_PTRACE
+    command: sleep infinity
+```
+
+Use cases:
+• pid: service:<name> — attach strace/gdb/perf to another service without modifying its image
+• ipc: service:<name> — share System V IPC and shared memory (e.g. pgbackrest with postgres)
+• pid: host — monitoring agents that need to see all host processes
+• ipc: none — strict isolation for untrusted code
+
+Security: sharing namespaces removes isolation. Don't combine with untrusted images.
+
+Full guide: lours.me/posts/compose-tip-069-pid-ipc/
+
+#Docker #DockerCompose #Debugging #Runtime #DevOps
+```

@@ -128,6 +128,11 @@
 - **Wed**: DNS config with `dns:` and `dns_search:` (Networking)
 - **Fri**: Volume drivers with NFS example (Storage)
 
+### Week 21 (May 25-29) - Mixed Themes - READY ✅
+- **Mon**: `pull_policy` for controlling image pulls (Build/Configuration)
+- **Wed**: `docker compose wait` for one-shot services (CLI/DevOps)
+- **Fri**: `pid_mode` and `ipc_mode` for namespace sharing (Runtime/Debugging)
+
 ---
 
 ## Future Topic Ideas
