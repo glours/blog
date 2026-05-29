@@ -133,6 +133,14 @@
 - **Wed**: `docker compose wait` for one-shot services (CLI/DevOps)
 - **Fri**: `pid_mode` and `ipc_mode` for namespace sharing (Runtime/Debugging)
 
+## Month 6 - June 2026
+
+### Week 22 (Jun 1-5) - Compose Bridge Deep Dive - READY ✅
+First themed deep-dive series (longer than the usual 1-pager tips, new "Compose Deep Dive" Hugo category, tip-number continuity preserved).
+- **Mon (#70)**: Part 1 — From Compose to Kubernetes: what Compose Bridge is, transformer images, default output (Introduction)
+- **Wed (#71)**: Part 2 — Custom transformers and `x-*` extensions: forking the defaults, enterprise rules, chaining transformations (Customization)
+- **Fri (#72)**: Part 3 — Generating a Docker Model Runner app for Kubernetes: host vs in-cluster topologies via the new `model-runner` overlay (AI/Advanced)
+
 ---
 
 ## Future Topic Ideas
