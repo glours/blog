@@ -141,6 +141,12 @@ First themed deep-dive series (longer than the usual 1-pager tips, new "Compose 
 - **Wed (#71)**: Part 2 — Custom transformers and `x-*` extensions: forking the defaults, enterprise rules, chaining transformations (Customization)
 - **Fri (#72)**: Part 3 — Generating a Docker Model Runner app for Kubernetes: host vs in-cluster topologies via the new `model-runner` overlay (AI/Advanced)
 
+### Week 23 (Jun 8-12) - Mixed Themes - READY ✅
+Back to standard 1-pager tip cadence after the deep dive.
+- **Mon (#73)**: `expose` vs `ports` — what actually gets published (Networking)
+- **Wed (#74)**: `docker compose ls` and cross-project visibility (CLI/Debugging)
+- **Fri (#75)**: Silencing noisy services with `attach: false` (Runtime/Logging)
+
 ---
 
 ## Future Topic Ideas

@@ -175,3 +175,188 @@ Full guide: lours.me/posts/compose-bridge-deep-dive-072-model-runner/
 
 #Docker #DockerCompose #Kubernetes #AI #LLM #ModelRunner
 ```
+
+---
+
+## Week 23: June 8-12, 2026 — back to regular tips
+
+### Monday, June 8 - expose vs ports (Tip #73)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #73
+
+expose vs ports, what's the difference?
+
+ports: publishes to the host
+expose: documents intent, no host binding
+
+Inter-service traffic works either way.
+
+Guide: lours.me/posts/compose-tip-073-expose-vs-ports/
+
+#Docker #Networking
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #73: expose vs ports — what actually gets published
+
+Two directives that look similar but do completely different things!
+
+```yaml
+services:
+  web:
+    image: nginx
+    ports:
+      - "8080:80"      # publishes to the host
+
+  db:
+    image: postgres:16
+    expose:
+      - "5432"         # documents intent, no host binding
+```
+
+Key facts:
+• ports actually binds a container port to the host
+• expose is documentation only — Compose tooling reads it as the service's contract
+• Services on the same network can reach each other on any listening port, with or without expose
+• ports: "5432:5432" on a database binds to 0.0.0.0 by default — accidental internet exposure
+• Safer: 127.0.0.1:5432:5432 or just expose: ["5432"]
+
+Use expose to make the service contract explicit; reserve ports for what truly needs to leave the network.
+
+Full guide: lours.me/posts/compose-tip-073-expose-vs-ports/
+
+#Docker #DockerCompose #Networking #Security #DevOps
+```
+
+---
+
+### Wednesday, June 10 - docker compose ls (Tip #74)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #74
+
+docker compose ps shows the current project.
+docker compose ls shows EVERY Compose stack on the host.
+
+Finds the zombie project still holding port 5432.
+
+Guide: lours.me/posts/compose-tip-074-compose-ls/
+
+#Docker #CLI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #74: docker compose ls and cross-project visibility
+
+ps shows the current project. ls zooms out: every Compose stack running on the host, no matter which directory you're in.
+
+```bash
+# Every running stack
+docker compose ls
+
+# Include stopped projects
+docker compose ls --all
+
+# Filter (only name= is supported)
+docker compose ls --filter name=api
+
+# Scripting-friendly: json or --quiet
+docker compose ls --format json
+docker compose ls -q
+```
+
+The "who's holding port 5432" workflow:
+
+```bash
+# 1. Find every running stack
+docker compose ls
+
+# 2. Inspect a suspect one from anywhere
+docker compose -f /path/to/old-prototype/compose.yaml ps
+
+# 3. Bring it down by name, no cd needed
+docker compose -p old-prototype down
+```
+
+A one-liner to clean up every stopped Compose project on the host (keep this one away from production):
+
+```bash
+docker compose ls --all --format json \
+  | jq -r '.[] | select(.Status | startswith("exited")) | .Name' \
+  | xargs -I{} docker compose -p {} down --volumes
+```
+
+Full guide: lours.me/posts/compose-tip-074-compose-ls/
+
+#Docker #DockerCompose #CLI #DevOps
+```
+
+---
+
+### Friday, June 12 - attach: false (Tip #75)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #75
+
+Hide noisy service logs from `compose up`!
+
+services:
+  proxy:
+    image: nginx
+    attach: false
+
+Or per run:
+docker compose up --no-attach proxy
+
+Logs still streamable via `compose logs`.
+
+Guide: lours.me/posts/compose-tip-075-attach-false/
+
+#Docker #Runtime
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #75: Silencing noisy services with attach: false
+
+docker compose up streams every service's logs into one terminal. With a chatty proxy or a model server, signal drowns in noise. attach: false fixes it without stopping the service.
+
+```yaml
+services:
+  web:
+    image: myapp
+
+  reverse-proxy:
+    image: nginx
+    attach: false      # logs hidden from `compose up`
+
+  metrics:
+    image: prom/prometheus
+    attach: false
+```
+
+CLI override for one-off cases:
+
+```bash
+docker compose up --no-attach reverse-proxy
+docker compose up --attach api          # only show api logs
+```
+
+Where it earns its keep:
+• Sidecars and proxies (Envoy, Nginx, Traefik) where access logs are background noise
+• Model servers (docker/model-runner et al.) that print tokenizer warnings every second
+• Healthcheck loops that exec a probe every 2s
+• Background workers whose tracebacks aren't today's bug
+
+It doesn't stop the service or silence it permanently — docker compose logs still streams. Reach for profiles (Tip #24) when the goal is to skip the service entirely.
+
+Full guide: lours.me/posts/compose-tip-075-attach-false/
+
+#Docker #DockerCompose #Runtime #Logging #DevOps
+```
