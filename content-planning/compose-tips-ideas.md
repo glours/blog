@@ -147,6 +147,11 @@ Back to standard 1-pager tip cadence after the deep dive.
 - **Wed (#74)**: `docker compose ls` and cross-project visibility (CLI/Debugging)
 - **Fri (#75)**: Silencing noisy services with `attach: false` (Runtime/Logging)
 
+### Week 24 (Jun 15-19) - Mixed Themes - READY ✅
+- **Mon (#76)**: `docker compose down` and its options — `-v`, `--rmi`, `--remove-orphans`, `-t` (CLI/Debugging)
+- **Wed (#77)**: Volume `subpath` for mounting a sub-directory of a named volume (Storage/Configuration)
+- **Fri (#78)**: The `COMPOSE_*` environment variables — defaults for the CLI in shell and CI (Configuration/CLI)
+
 ---
 
 ## Future Topic Ideas

@@ -360,3 +360,224 @@ Full guide: lours.me/posts/compose-tip-075-attach-false/
 
 #Docker #DockerCompose #Runtime #Logging #DevOps
 ```
+
+---
+
+## Week 24: June 15-19, 2026 — Mixed Themes
+
+### Monday, June 15 - docker compose down options (Tip #76)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #76
+
+docker compose down — the flags that decide what actually gets removed.
+
+down            → containers + networks
+down -v         → also named volumes (data gone!)
+down --rmi local → also local images
+down --remove-orphans → cleanup old services
+
+Guide: lours.me/posts/compose-tip-076-compose-down-options/
+
+#Docker #CLI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #76: docker compose down and its options
+
+down looks like a tidy shutdown. The flags around it decide whether you walk away with your data intact — or with a database wiped because you typed -v out of habit.
+
+What plain `down` removes:
+• Every container in the project
+• The default network Compose created
+• Anonymous volumes
+
+What it does NOT remove:
+• Named volumes (data is safe)
+• Images
+• External networks
+• Containers for services outside the current Compose file
+
+The flags worth knowing:
+
+```bash
+# Also remove named volumes — irreversible data loss, no confirmation prompt
+docker compose down -v
+
+# Also remove images built by this project
+docker compose down --rmi local
+
+# Also remove every image referenced by the project (incl. pulled bases)
+docker compose down --rmi all
+
+# Clean up containers from services that no longer exist in the file
+docker compose down --remove-orphans
+
+# Wait longer than the default 10s before SIGKILL
+docker compose down -t 60
+```
+
+A safer habit: type the long form `--volumes` when you mean it. Never alias `down` to `down -v`.
+
+Before destructive teardown, dry-run it first (Tip #54):
+
+```bash
+docker compose down -v --rmi all --remove-orphans --dry-run
+```
+
+Reading that list once is cheaper than restoring from backup.
+
+Full guide: lours.me/posts/compose-tip-076-compose-down-options/
+
+#Docker #DockerCompose #CLI #DevOps
+```
+
+---
+
+### Wednesday, June 17 - Volume subpath (Tip #77)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #77
+
+One named volume, multiple services, each scoped to its own sub-directory:
+
+volumes:
+  - type: volume
+    source: app-data
+    target: /var/data
+    volume:
+      subpath: api
+
+Same backup unit, clean isolation.
+
+Guide: lours.me/posts/compose-tip-077-volume-subpath/
+
+#Docker #Storage
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #77: Volume subpath for mounting a sub-directory
+
+Named volumes default to mounting the entire volume root at the container target. Sometimes you want only a sub-directory — for instance, several services sharing one named volume, each scoped to its own corner.
+
+```yaml
+services:
+  api:
+    image: myapi
+    volumes:
+      - type: volume
+        source: app-data
+        target: /var/data
+        volume:
+          subpath: api
+
+  worker:
+    image: myworker
+    volumes:
+      - type: volume
+        source: app-data
+        target: /var/data
+        volume:
+          subpath: worker
+
+  backup:
+    image: alpine
+    command: tar -czf /backup/snapshot.tgz /source
+    volumes:
+      - type: volume
+        source: app-data
+        target: /source
+        # No subpath, sees the whole volume
+
+volumes:
+  app-data:
+```
+
+Why not just use N separate named volumes? Three reasons:
+• Single backup unit — one snapshot, one restore
+• Shared driver options (NFS, encryption, perf tuning) inherited by every consumer
+• Atomic migration — moving the storage moves all sub-paths at once
+
+Bonus: since Compose v2.35, `image.subpath` does the same trick for OCI-image-backed volumes — mount only the directory you need from a larger image.
+
+Full guide: lours.me/posts/compose-tip-077-volume-subpath/
+
+#Docker #DockerCompose #Storage #DevOps
+```
+
+---
+
+### Friday, June 19 - COMPOSE_* environment variables (Tip #78)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #78
+
+Stop retyping -f and -p. The COMPOSE_* env vars set defaults for the CLI.
+
+export COMPOSE_FILE=compose.yaml:compose.dev.yaml
+export COMPOSE_PROJECT_NAME=myapp-dev
+export COMPOSE_PROFILES=full
+
+Drop in .envrc or your CI env, forget about it.
+
+Guide: lours.me/posts/compose-tip-078-compose-env-vars/
+
+#Docker #DevOps
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #78: The COMPOSE_* environment variables
+
+Almost every Compose CLI flag has an environment-variable counterpart. Set them once, in your shell or CI, and stop retyping the same -f / -p / --profile / --env-file on every command.
+
+The ones that show up most:
+
+• COMPOSE_FILE — path(s) to the Compose file(s) (use COMPOSE_PATH_SEPARATOR to change the separator)
+• COMPOSE_PROJECT_NAME — project name
+• COMPOSE_PROFILES — profiles to enable
+• COMPOSE_ENV_FILES — project-level env files
+• COMPOSE_PROGRESS — auto / tty / plain / json / quiet
+• COMPOSE_REMOVE_ORPHANS — always clean up orphans on up/down
+• COMPOSE_IGNORE_ORPHANS — silence the warning
+• COMPOSE_PARALLEL_LIMIT — cap parallel operations
+
+Local pattern — drop a .envrc next to your compose.yaml:
+
+```bash
+export COMPOSE_FILE=compose.yaml:compose.dev.yaml
+export COMPOSE_PROJECT_NAME=myapp-dev
+export COMPOSE_PROFILES=full
+```
+
+cd into the directory and every command picks up the right defaults.
+
+CI pattern — deterministic runs, no flag drift:
+
+```yaml
+env:
+  COMPOSE_FILE: compose.yaml:compose.ci.yaml
+  COMPOSE_PROJECT_NAME: ${{ github.run_id }}
+  COMPOSE_PROGRESS: plain
+  COMPOSE_REMOVE_ORPHANS: "true"
+```
+
+Precedence (low → high):
+1. Compose defaults
+2. Project .env
+3. COMPOSE_* env vars
+4. Explicit CLI flags
+
+So `--file compose.alt.yaml` always beats COMPOSE_FILE in the shell. The env vars are defaults, not overrides.
+
+Pro tip: when "it works on my machine" strikes, run `env | grep ^COMPOSE_`. Half the support requests on Compose stacks are someone with COMPOSE_FILE pointing at the wrong file.
+
+Full guide: lours.me/posts/compose-tip-078-compose-env-vars/
+
+#Docker #DockerCompose #CLI #DevOps #Platform
+```
