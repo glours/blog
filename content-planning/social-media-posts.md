@@ -517,13 +517,13 @@ Full guide: lours.me/posts/compose-tip-077-volume-subpath/
 ```
 🐳 🐙 Docker Compose Tip #78
 
-Stop retyping -f and -p. The COMPOSE_* env vars set defaults for the CLI.
+Stop retyping -f and -p. Pin defaults in the project .env file:
 
-export COMPOSE_FILE=compose.yaml:compose.dev.yaml
-export COMPOSE_PROJECT_NAME=myapp-dev
-export COMPOSE_PROFILES=full
+COMPOSE_FILE=compose.yaml:compose.dev.yaml
+COMPOSE_PROJECT_NAME=myapp-dev
+COMPOSE_PROFILES=full
 
-Drop in .envrc or your CI env, forget about it.
+Compose loads it before parsing compose.yaml. No shell setup needed.
 
 Guide: lours.me/posts/compose-tip-078-compose-env-vars/
 
@@ -547,15 +547,16 @@ The ones that show up most:
 • COMPOSE_IGNORE_ORPHANS — silence the warning
 • COMPOSE_PARALLEL_LIMIT — cap parallel operations
 
-Local pattern — drop a .envrc next to your compose.yaml:
+Local pattern — drop the COMPOSE_* vars into the project .env file (the one Compose already loads for ${VAR} interpolation):
 
-```bash
-export COMPOSE_FILE=compose.yaml:compose.dev.yaml
-export COMPOSE_PROJECT_NAME=myapp-dev
-export COMPOSE_PROFILES=full
+```ini
+# .env
+COMPOSE_FILE=compose.yaml:compose.dev.yaml
+COMPOSE_PROJECT_NAME=myapp-dev
+COMPOSE_PROFILES=full
 ```
 
-cd into the directory and every command picks up the right defaults.
+No shell setup, no third-party tool. cd into the directory and every command picks up the right defaults. The values stay scoped to Compose — if you need them visible to other shell commands, export them in your shell or use a tool like direnv on top.
 
 CI pattern — deterministic runs, no flag drift:
 

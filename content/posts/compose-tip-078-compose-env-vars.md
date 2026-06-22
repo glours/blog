@@ -22,7 +22,7 @@ ShowRssButtonInSectionTermList: false
 UseHugoToc: false
 ---
 
-Almost every Compose CLI flag has an environment-variable counterpart. Setting them once in your shell, in `direnv`, or in CI removes the need to retype the same flags on every command — and makes the configuration of a stack visible to anything that reads the environment.
+Almost every Compose CLI flag has an environment-variable counterpart. Setting them once in a project `.env` file, in your shell, or in CI removes the need to retype the same flags on every command — and makes the configuration of a stack visible to anything that reads the environment.
 
 ## The core set
 
@@ -62,18 +62,29 @@ export COMPOSE_PATH_SEPARATOR=,
 export COMPOSE_FILE=compose.yaml,compose.prod.yaml
 ```
 
-## Per-environment defaults with direnv
+## Per-project defaults with `.env`
 
-Drop a `.envrc` next to the `compose.yaml`:
+The cleanest place to pin per-project defaults is the project `.env` file. Compose loads it automatically before parsing `compose.yaml`, and the COMPOSE_* control variables it finds are honored just like shell-exported ones:
 
-```bash
-# .envrc
-export COMPOSE_FILE=compose.yaml:compose.dev.yaml
-export COMPOSE_PROJECT_NAME=myapp-dev
-export COMPOSE_PROFILES=full
+```ini
+# .env (loaded by Compose itself)
+COMPOSE_FILE=compose.yaml:compose.dev.yaml
+COMPOSE_PROJECT_NAME=myapp-dev
+COMPOSE_PROFILES=full
 ```
 
-`cd` into the directory and every `docker compose` invocation picks up the right files, the right project name, and the right profiles. Switch to another worktree and the defaults change automatically.
+```bash
+docker compose config
+# name: myapp-dev — both files merged, profile "full" enabled
+```
+
+No shell setup, no third-party tool, nothing to source. Switch to another worktree and the defaults change automatically because the `.env` is local to the directory.
+
+A few caveats:
+
+- The values stay scoped to Compose. They're not exported to your shell, so tools other than `docker compose` (e.g., a wrapper script) won't see them. If you need that, set them in the shell or use a tool like [direnv](https://direnv.net/) on top.
+- The format is `KEY=VALUE`, no `export`, no shell logic.
+- This is the same `.env` used for `${VAR}` interpolation in `compose.yaml` ([Tip #42](/posts/compose-tip-042-variable-substitution/)), so keep it readable.
 
 ## Pinning for deterministic CI runs
 
