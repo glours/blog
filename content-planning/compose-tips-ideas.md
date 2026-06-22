@@ -152,6 +152,11 @@ Back to standard 1-pager tip cadence after the deep dive.
 - **Wed (#77)**: Volume `subpath` for mounting a sub-directory of a named volume (Storage/Configuration)
 - **Fri (#78)**: The `COMPOSE_*` environment variables — defaults for the CLI in shell and CI (Configuration/CLI)
 
+### Week 25 (Jun 22-26) - Mixed Themes - READY ✅
+- **Mon (#79)**: `docker compose run` advanced flags — `--rm`, `--service-ports`, `-e`, `--entrypoint`, `--build`, `--no-deps` (CLI/Development)
+- **Wed (#80)**: `additional_contexts` for multi-context builds — `docker-image://`, `oci-layout://`, git, sibling service (Build)
+- **Fri (#81)**: `tty: true` and `stdin_open: true` for interactive containers (Runtime/Development)
+
 ---
 
 ## Future Topic Ideas

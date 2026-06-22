@@ -581,3 +581,219 @@ Full guide: lours.me/posts/compose-tip-078-compose-env-vars/
 
 #Docker #DockerCompose #CLI #DevOps #Platform
 ```
+
+---
+
+## Week 25: June 22-26, 2026 — Mixed Themes
+
+### Monday, June 22 - docker compose run advanced flags (Tip #79)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #79
+
+docker compose run — the flags worth memorising:
+
+--rm              clean up after exit
+--service-ports   actually publish the ports
+--no-deps         skip depends_on
+--entrypoint sh   override the entrypoint
+--build           rebuild before run
+
+Guide: lours.me/posts/compose-tip-079-compose-run-advanced/
+
+#Docker #CLI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #79: docker compose run advanced flags
+
+`run` creates a fresh container for a service and attaches your terminal. The flags around it decide what gets started, what gets cleaned up, and whether ports are published.
+
+The set worth knowing by heart:
+
+• --rm — remove the container on exit. Use on every interactive run.
+• --service-ports — actually publish the ports declared on the service (the default is to skip them to avoid clashes with `up`)
+• -e KEY=VALUE — ad-hoc env vars, no file edit needed
+• --entrypoint sh — bypass the image's entrypoint to get a shell
+• --build — rebuild the image before running
+• --no-deps — skip the depends_on graph
+• -v src:dst — one-off bind mount
+
+The combo for "give me a shell in a freshly built image":
+
+```bash
+docker compose run --rm \
+  --no-deps \
+  --entrypoint sh \
+  --build \
+  api
+```
+
+Rebuild, drop into a shell, no dependency setup, clean up on exit. The canonical "let me poke at this" command.
+
+Pro tip — an alias pair pays off fast:
+
+```bash
+alias dcr='docker compose run --rm'
+alias dcrsh='docker compose run --rm --no-deps --entrypoint sh'
+```
+
+Full guide: lours.me/posts/compose-tip-079-compose-run-advanced/
+
+#Docker #DockerCompose #CLI #DevOps
+```
+
+---
+
+### Wednesday, June 24 - additional_contexts for builds (Tip #80)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #80
+
+Need files from outside the build context? additional_contexts wires them in by name.
+
+build:
+  context: ./app
+  additional_contexts:
+    cli: docker-image://ghcr.io/myorg/mycli:v3
+    docs: https://github.com/myorg/docs.git#main
+
+Then: COPY --from=cli ...
+
+Guide: lours.me/posts/compose-tip-080-additional-contexts/
+
+#Docker #BuildKit
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #80: additional_contexts for multi-context builds
+
+A Dockerfile has one build context. Sometimes you need files from elsewhere — a base image, an OCI layout, a separate git repo, or another service's build output. `additional_contexts` wires all of them into a single build.
+
+```yaml
+services:
+  app:
+    build:
+      context: ./app
+      additional_contexts:
+        shared: ../shared                              # local dir
+        cli: docker-image://ghcr.io/myorg/mycli:v3.2.0 # image
+        cached: oci-layout://./oci-cache               # OCI layout
+        docs: https://github.com/myorg/docs.git#main   # git repo
+```
+
+Then in the Dockerfile, reference them by name:
+
+```dockerfile
+COPY --from=cli /usr/local/bin/mycli /usr/local/bin/
+COPY --from=docs /reference /app/docs
+```
+
+The killer pattern: pull a compiled binary out of a published image without a heavyweight multi-stage rewrite. No vendoring, no package manager, just `COPY --from=cli`.
+
+Cross-service variant — build A using B's image as a context:
+
+```yaml
+services:
+  builder:
+    build: ./builder
+
+  app:
+    build:
+      context: ./app
+      additional_contexts:
+        artefacts: service:builder
+```
+
+Compose orders the builds: `builder` first, then its image is exposed under `artefacts` when building `app`. Removes the need for a published intermediate image when the artefact only matters within the project.
+
+Pin git sources to a commit SHA or tag (not `#main`) to keep the cache stable across builds.
+
+Full guide: lours.me/posts/compose-tip-080-additional-contexts/
+
+#Docker #DockerCompose #BuildKit #DevOps
+```
+
+---
+
+### Friday, June 26 - tty + stdin_open (Tip #81)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #81
+
+The Compose equivalent of docker run -it:
+
+services:
+  shell:
+    image: alpine
+    command: sh
+    stdin_open: true   # = -i
+    tty: true          # = -t
+
+Pair with `docker compose run` to actually type into it.
+
+Guide: lours.me/posts/compose-tip-081-tty-stdin-open/
+
+#Docker #Runtime
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #81: tty and stdin_open for interactive containers
+
+Drop a `bash` or `python` service into a compose.yaml and it exits immediately on `up`. The container starts, sees no stdin, prints nothing, and stops. The fix is the Compose equivalent of `docker run -it`:
+
+```yaml
+services:
+  shell:
+    image: alpine
+    command: sh
+    stdin_open: true   # = docker run -i
+    tty: true          # = docker run -t
+```
+
+Setting the flags is half the story. By default, `up` attaches every service to a multiplexed terminal — keystrokes don't reach one specific container. Three ways to make the interactive flow actually work:
+
+1. `docker compose run --rm <service>` (Tip #79) — always attaches
+2. `docker compose up -d` then `docker compose attach <service>`
+3. Start only the interactive service in the foreground
+
+Where this earns its keep:
+• Debug toolboxes (nicolaka/netshoot brought up on demand)
+• Pinned language REPLs (python -i, node, ghci) shared across the team
+• In-stack CLI clients (redis-cli, mongosh, mysql)
+• Interactive migration runners that ask for confirmation
+
+A reproducible pattern with a database client:
+
+```yaml
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: dev
+
+  psql:
+    image: postgres:16
+    depends_on: [db]
+    command: psql -h db -U postgres
+    stdin_open: true
+    tty: true
+```
+
+```bash
+docker compose up -d db
+docker compose run --rm psql
+```
+
+If you don't want the interactive service polluting `up` logs, pair with `attach: false` (Tip #75) and bring it forward with `docker compose attach` only when needed.
+
+Full guide: lours.me/posts/compose-tip-081-tty-stdin-open/
+
+#Docker #DockerCompose #Runtime #DevOps
+```
