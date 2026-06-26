@@ -157,6 +157,9 @@ Back to standard 1-pager tip cadence after the deep dive.
 - **Wed (#80)**: `additional_contexts` for multi-context builds — `docker-image://`, `oci-layout://`, git, sibling service (Build)
 - **Fri (#81)**: `tty: true` and `stdin_open: true` for interactive containers (Runtime/Development)
 
+### Summer Break (Jun 29 - Sep 4)
+No tips during the summer. Series resumes Monday, September 7.
+
 ---
 
 ## Future Topic Ideas

@@ -798,3 +798,52 @@ Full guide: lours.me/posts/compose-tip-081-tty-stdin-open/
 
 #Docker #DockerCompose #Runtime #DevOps
 ```
+
+---
+
+## Summer Break — Monday June 29 announcement
+
+The Docker Compose Tips series is taking a summer break after Tip #81. These two posts go out on Monday June 29 to announce the pause and the September return.
+
+### Monday, June 29 - Summer break announcement
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tips — summer break
+
+After 81 tips since January, the series is pausing for the summer.
+
+Back Monday September 7.
+
+In the meantime, the archive is open: lours.me/posts/
+
+Have a good summer — see you in September.
+
+#Docker #DockerCompose
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tips — taking a summer break
+
+Since the first tip went live on January 5, the series has covered 81 ways to do more with Compose:
+
+• Health checks, `depends_on` conditions, and graceful shutdown
+• Hot-reload with Compose Watch and the `develop:` section
+• Multi-platform builds, Wasm, and GPU workloads
+• The `models:` and `provider:` sections for LLMs and Docker Model Runner
+• Compose Bridge — from a local Compose file to Kubernetes manifests
+• `additional_contexts` for multi-source builds
+• `COMPOSE_*` environment variables for shell defaults and CI
+• …and 74 others.
+
+Three tips a week for almost six months. Time for a break.
+
+The series resumes Monday, September 7. Until then, the full archive is at lours.me/posts/ — bookmark anything you missed, and try the patterns in your own stacks.
+
+A huge thanks to everyone who reads, shares, and pushes back on the tips. The series exists because the community engages with it.
+
+Have a good summer. See you in September.
+
+#Docker #DockerCompose #DevOps
+```
