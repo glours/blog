@@ -107,9 +107,14 @@ UseHugoToc: false
 4. **Why This Matters**: Business/technical value
 5. **Pro Tip**: Advanced usage or gotcha
 
+> Stick to these 5 sections for standard tips. Resist adding extra sub-sections like "When you need only one", "Real use cases", or multiple comparison tables — they're the main source of length drift. Deep dive posts have no such constraint.
+
 #### Writing Style Guidelines
 - **Natural Language**: Write conversationally, like a human developer sharing knowledge
 - **Simple and Direct**: Use short sentences, avoid complex structures
+- **Length**:
+  - **Standard tips**: Target ~500 words, hard cap 600 (one-pager, single-screen read)
+  - **Deep dive posts** (Compose Deep Dive category, e.g., Tips #70-72): Aim for thorough coverage — go as long as the topic genuinely needs, no upper cap. Multiple H2 sections, comparison tables, and extended examples are expected here.
 - **Neutral Tone**: Stay professional and neutral - avoid "I", "my", "we", "our"
 - **No AI Patterns**:
   - Avoid catchy/clickbait titles
