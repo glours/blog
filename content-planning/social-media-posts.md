@@ -847,3 +847,54 @@ Have a good summer. See you in September.
 
 #Docker #DockerCompose #DevOps
 ```
+
+---
+
+## Special publication — Tuesday, September 1, 2026
+
+This deep dive is published outside the regular Docker Compose Tips schedule. It follows a current discussion about how credentials should move from a password manager into a Compose service, without targeting or naming another article.
+
+### Compose secrets runtime delivery deep dive
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Compose secret sources do not behave alike.
+
+`secrets.file` → bind mount
+`secrets.environment` → writable layer
+Swarm → in-memory mount
+
+Same `/run/secrets` path, different persistence.
+
+Deep dive: lours.me/posts/compose-secrets-deep-dive-runtime-delivery/
+
+#Docker #Security
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Compose Secrets Deep Dive: Providers, Persistence, and the Last Mile
+
+A recent post about keeping Docker Compose credentials out of plaintext files made me revisit a broader question: what are the best ways to move a secret into a Compose service, given the platform's current limitations?
+
+The answer depends on the starting point. If Git must support an offline deployment or disaster recovery, keeping an encrypted copy there can provide a useful operational property. But when the credential already lives in a password manager that is reachable during deployment, creating another copy — even an encrypted one — also creates another access policy, key lifecycle, and rotation path. In that situation, the password manager should remain the source of truth.
+
+The next question is the last mile: how does the value reach the application without ending up in a regular environment variable, a persistent host file, the container configuration, or an accidental image snapshot?
+
+One assumption did not survive testing: a file under `/run/secrets/` is not necessarily backed by memory. Swarm secrets use an in-memory mount, but local Compose materializes an environment-sourced secret in the container's writable layer. It stays out of `Config.Env` and avoids a host source file, but `docker commit` captures it.
+
+Other paths make different trade-offs:
+
+• `environment:` and `env_file:` put the plaintext in the container configuration
+• `secrets.file` uses a bind mount, so `docker commit` excludes its content
+• rendering that source file under a host tmpfs avoids persistent host storage on Linux
+• a runtime provider can resolve a reference without putting the value in the Compose model
+• `_FILE` support keeps the value out of the application environment
+• a small entrypoint wrapper remains the fallback when the application only accepts the value itself
+
+The password manager should remain the source of truth. The last mile is about choosing where plaintext is allowed to exist, how long it remains there, and what survives a container snapshot or host restart.
+
+Full deep dive: lours.me/posts/compose-secrets-deep-dive-runtime-delivery/
+
+#Docker #DockerCompose #Security #DevOps #SecretsManagement
+```
