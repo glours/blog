@@ -160,6 +160,16 @@ Back to standard 1-pager tip cadence after the deep dive.
 ### Summer Break (Jun 29 - Sep 4)
 No tips during the summer. Series resumes Monday, September 7.
 
+## Month 7 - September 2026
+
+### Week 26 (Sep 7-11) - What Changed Over the Break
+Resuming after the summer break with tips grounded in real Compose changes from v5.2.0 through v5.5.1, released while the series was paused.
+- **Mon (#82)**: Native init containers via `pre_start` hooks with a dedicated image (Runtime/Configuration)
+- **Wed (#83)**: The image digest reconciliation bug: why `up` recreated containers with no real change behind it (Build/Runtime)
+- **Fri (#84)**: Lifecycle hook output is now captured and surfaced on failure (Debugging/Runtime)
+
+Held in reserve for a future week: `compose down` now spares the tagged image of orphaned services, `compose ps` honors `psFormat` from the Docker CLI config, the new `ENGINE` column in `compose ps`, and `compose watch` fixes (symlinked directories, Dockerfile excluded from initial sync).
+
 ---
 
 ## Future Topic Ideas
