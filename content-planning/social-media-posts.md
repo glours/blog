@@ -187,3 +187,135 @@ Full guide: lours.me/posts/compose-tip-084-lifecycle-hook-output/
 
 #Docker #DockerCompose #Debugging #DevOps
 ```
+
+---
+
+## Week 27: September 14-18, 2026 - Mixed Themes
+
+### Monday, September 14 - What docker compose alpha actually means (Tip #85)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #85
+
+See what's incubating: docker compose alpha is where new commands land before going stable.
+
+Right now: viz (dependency graphs) and generate (reverse a Compose file from running containers).
+
+Guide: lours.me/posts/compose-tip-085-alpha-commands/
+
+#Docker #CLI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #85: What docker compose alpha actually means
+
+Want a preview of what's incubating for Compose? docker compose alpha is where new commands land before they're stable, and right now two are worth a look:
+
+• viz: reads a Compose file and prints a Graphviz graph of the service dependency graph, useful the moment depends_on stops being readable at a glance
+• generate: points at already-running containers and writes back a Compose file, useful for adopting Compose on a stack that only ever existed as docker run commands
+
+Both are getting their own dedicated deep-dive tip soon.
+
+One caveat before you build anything on top of them: alpha commands can change or vanish between releases without warning, and that's not hypothetical. docker compose watch itself lived under alpha from January 2023 to January 2024 before it became the stable command it is today. docker compose publish made the same move, and its old alpha alias still runs. Read the --help output for what's current, not a blog post.
+
+Full guide: lours.me/posts/compose-tip-085-alpha-commands/
+
+#Docker #DockerCompose #CLI #DevOps
+```
+
+---
+
+### Wednesday, September 16 - initial_sync just got a lot more trustworthy (Tip #86)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #86
+
+Meet initial_sync, the watch attribute for catching up a running stack.
+
+5.5.1: every file now syncs, Dockerfiles stay out, symlinks don't break it.
+
+Guide: lours.me/posts/compose-tip-086-watch-sync-reliability/
+
+#Docker #Development
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #86: initial_sync just got a lot more trustworthy
+
+Tip #11 covered sync and rebuild. Meet the attribute it didn't cover: initial_sync, which re-syncs a path into containers that already exist, for when you reattach watch to a stack that's still running.
+
+```yaml
+services:
+  web:
+    build: .
+    develop:
+      watch:
+        - path: ./src
+          target: /app/src
+          action: sync
+          initial_sync: true
+```
+
+Compose 5.5.1 closes three ways it could still let you down:
+
+• Every file now syncs, regardless of when it was last touched. The old mtime check skipped anything older than the image, which is backwards: source code checked out from git is almost always older than the image built from it, so the files initial_sync exists to catch up were exactly the ones it silently left behind.
+
+• Dockerfile and compose files stay out of the container again, the way initial_sync's own doc comment always promised. A January 2025 refactor had quietly dropped the filter enforcing that.
+
+• A sync into a path the container resolves through a symlink no longer aborts the whole batch. Compose retries a rejected copy without the directory headers its own file entries already imply, so the sync lands where it should.
+
+Full guide: lours.me/posts/compose-tip-086-watch-sync-reliability/
+
+#Docker #DockerCompose #Development #DevOps
+```
+
+---
+
+### Friday, September 18 - The depends_on options tip #3 didn't cover (Tip #87)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #87
+
+depends_on has more than service_healthy: wait for a one-shot with service_completed_successfully, cascade restarts with restart: true, or soften it with required: false.
+
+Guide: lours.me/posts/compose-tip-087-advanced-depends-on/
+
+#Docker #Configuration
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #87: The depends_on options tip #3 didn't cover
+
+Tip #3 stopped at condition: service_healthy. The long-form depends_on syntax has three more fields, each solving a different problem:
+
+```yaml
+services:
+  api:
+    build: .
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      cache:
+        condition: service_started
+        restart: true
+      metrics:
+        condition: service_started
+        required: false
+```
+
+service_completed_successfully waits for a service to exit, and only starts the dependent if it exited zero. If migrate exits non-zero, api never starts, and the error names exactly which dependency failed.
+
+restart: true is easy to misread as "restart me if the dependency container restarts." It doesn't. It only fires on an explicit docker compose restart: run docker compose restart cache, and every service that declared cache as a dependency with restart: true restarts right after it. A restart: always policy reviving cache on its own doesn't trigger anything here.
+
+required: false changes what happens when Compose gives up, not whether it waits first. If the dependency has a container running, Compose polls its condition exactly like a required one. required only decides whether a failed or timed-out wait becomes a hard error or a warning, instead of blocking the dependent entirely.
+
+Full guide: lours.me/posts/compose-tip-087-advanced-depends-on/
+
+#Docker #DockerCompose #Configuration #DevOps
+```

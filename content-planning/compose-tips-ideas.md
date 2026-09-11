@@ -168,7 +168,19 @@ Resuming after the summer break with tips grounded in real Compose changes from 
 - **Wed (#83)**: The image digest reconciliation bug: why `up` recreated containers with no real change behind it (Build/Runtime)
 - **Fri (#84)**: Lifecycle hook output is now captured and surfaced on failure (Debugging/Runtime)
 
-Held in reserve for a future week: `compose down` now spares the tagged image of orphaned services, `compose ps` honors `psFormat` from the Docker CLI config, the new `ENGINE` column in `compose ps`, and `compose watch` fixes (symlinked directories, Dockerfile excluded from initial sync).
+Held in reserve for a future week: `compose down` now spares the tagged image of orphaned services, `compose ps` honors `psFormat` from the Docker CLI config, and `compose watch` fixes (symlinked directories, Dockerfile excluded from initial sync).
+
+Not a public topic: the new `ENGINE` column in `compose ps` only supports a very specific case still in internal development. Don't write about it until it's actually ready for a public audience.
+
+### Week 27 (Sep 14-18) - Mixed Themes - READY ✅
+`compose down`'s orphaned-image fix (#14154) turned out too narrow for a full public post (needs `--remove-orphans` context plus dangling-image internals with little payoff); dropped in favor of a `docker compose alpha` overview instead.
+- **Mon (#85)**: What `docker compose alpha` actually means: the experimental-command disclaimer, `watch`'s full alpha-to-stable lifecycle (Jan 2023 to Jan 2024, verified against the compose repo's own git history) and `publish`'s ongoing one as proof, and a brief look at `viz`/`generate` (each gets its own deep-dive tip later) (CLI/Beginner)
+- **Wed (#86)**: `compose watch` sync reliability: `initial_sync`'s backwards mtime filter removed, Dockerfile/compose files excluded from `initial_sync` again, and a symlinked sync target no longer aborts the whole batch (Development)
+- **Fri (#87)**: Advanced `depends_on`: `service_completed_successfully`, `restart: true` (only fires on `docker compose restart`), and `required: false`, the sub-options tip #3 didn't cover (Configuration/Runtime)
+
+Still in reserve for a future week: `compose ps` honors `psFormat` from the Docker CLI config, `docker compose alpha viz` (Graphviz dependency graph) and `docker compose alpha generate` (reverse a Compose file from running containers) as their own detailed tips.
+
+Still in reserve for a future week: `compose ps` honors `psFormat` from the Docker CLI config, `docker compose alpha viz` (Graphviz dependency graph), `docker compose alpha generate` (reverse a Compose file from running containers).
 
 ---
 
