@@ -178,9 +178,14 @@ Not a public topic: the new `ENGINE` column in `compose ps` only supports a very
 - **Wed (#86)**: `compose watch` sync reliability: `initial_sync`'s backwards mtime filter removed, Dockerfile/compose files excluded from `initial_sync` again, and a symlinked sync target no longer aborts the whole batch (Development)
 - **Fri (#87)**: Advanced `depends_on`: `service_completed_successfully`, `restart: true` (only fires on `docker compose restart`), and `required: false`, the sub-options tip #3 didn't cover (Configuration/Runtime)
 
-Still in reserve for a future week: `compose ps` honors `psFormat` from the Docker CLI config, `docker compose alpha viz` (Graphviz dependency graph) and `docker compose alpha generate` (reverse a Compose file from running containers) as their own detailed tips.
+Still in reserve for a future week: `docker compose alpha viz` (Graphviz dependency graph) and `docker compose alpha generate` (reverse a Compose file from running containers) as their own detailed tips.
 
-Still in reserve for a future week: `compose ps` honors `psFormat` from the Docker CLI config, `docker compose alpha viz` (Graphviz dependency graph), `docker compose alpha generate` (reverse a Compose file from running containers).
+Dropped: `compose ps` honoring `psFormat` from the Docker CLI config — too niche, no real reader value.
+
+### Week 28 (Sep 21-25) - Mixed Themes
+- **Mon (#88)**: `docker compose alpha generate` — reversing a Compose file from running containers (CLI/Advanced)
+- **Wed (#89)**: Capability dropping — `cap_drop`/`cap_add` in practice, beyond the general security options in tip #6 (Security)
+- **Fri (#90)**: `docker compose alpha viz` — Graphviz dependency graph of a Compose file (CLI/Advanced)
 
 ---
 

@@ -319,3 +319,121 @@ Full guide: lours.me/posts/compose-tip-087-advanced-depends-on/
 
 #Docker #DockerCompose #Configuration #DevOps
 ```
+
+---
+
+## Week 28: September 21-25, 2026 - Mixed Themes
+
+### Monday, September 21 - Reversing a Compose file with docker compose alpha generate (Tip #88)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #88
+
+docker compose alpha generate reverses a Compose file from running containers. Still alpha: skip a host IP on a published port and it writes host_ip: invalid IP.
+
+A real bug, and an easy first PR.
+
+Guide: lours.me/posts/compose-tip-088-alpha-generate/
+
+#Docker #CLI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #88: Reversing a Compose file with docker compose alpha generate
+
+Tip #28 covered translating docker run flags to Compose by hand. docker compose alpha generate does the same job the other way: point it at a container that's already running and it inspects it, then writes back the Compose file.
+
+```bash
+docker compose alpha generate mycontainer --name myapp
+```
+
+It reads networks, volumes, and healthchecks the same way. Two things worth knowing before committing the output:
+
+• Environment and labels include everything baked into the image, not just what you passed on the command line
+• Publish a port without pinning a host IP and generate writes host_ip: invalid IP into the port entry instead of 0.0.0.0, traced to a zero-value netip.Addr in pkg/compose/generate.go, confirmed present in the released v5.5.1
+
+generate and viz (Tip #90) are the only two commands under alpha right now: still being built, no deprecation notice required if something changes between releases. That also makes them one of the more approachable places to start reading Compose's own source, and to send a fix.
+
+Full guide: lours.me/posts/compose-tip-088-alpha-generate/
+
+#Docker #DockerCompose #CLI #OpenSource #DevOps
+```
+
+---
+
+### Wednesday, September 23 - What cap_drop actually takes away from root (Tip #89)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #89
+
+cap_drop: ALL doesn't just fence in non-root users, it takes CHOWN away from root (uid 0) too.
+
+Gotcha: the classic "drop NET_RAW, ping breaks" demo often does nothing on modern hosts.
+
+Guide: lours.me/posts/compose-tip-089-capability-dropping/
+
+#Docker #Security
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #89: What cap_drop actually takes away from root
+
+Tip #29 listed which cap_add values pair with which workload. Here's the part worth sitting with: what cap_drop: ALL removes even from a container running as root.
+
+```yaml
+services:
+  hardened:
+    image: alpine
+    cap_drop:
+      - ALL
+    command: sh -c "touch /tmp/f && chown 2000:2000 /tmp/f && echo OK"
+```
+
+Run that from a uid 0 process and it fails: chown: /tmp/f: Operation not permitted. Add cap_add: [CHOWN] back and it succeeds. Capabilities aren't a non-root safeguard bolted on top of the UID check, they gate root's own privileges.
+
+Gotcha for whoever reaches for the classic demo instead: dropping NET_RAW and expecting ping to fail doesn't prove much if net.ipv4.ping_group_range covers your container's group. 0 2147483647 is the wide-open default on several distros, including Docker Desktop's VM. Same story for NET_BIND_SERVICE and net.ipv4.ip_unprivileged_port_start. Check both sysctls before building a demo, a test, or a security argument on either capability. CAP_CHOWN has no such escape hatch.
+
+Full guide: lours.me/posts/compose-tip-089-capability-dropping/
+
+#Docker #DockerCompose #Security #DevOps
+```
+
+---
+
+### Friday, September 25 - Seeing your service graph with docker compose alpha viz (Tip #90)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #90
+
+docker compose alpha viz turns depends_on into a Graphviz graph. Pipe into dot -Tpng and any Compose file becomes a picture.
+
+Still alpha since April 2023, no graduation date yet.
+
+Guide: lours.me/posts/compose-tip-090-alpha-viz/
+
+#Docker #CLI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #90: Seeing your service graph with docker compose alpha viz
+
+depends_on reads fine at two or three services. Past that, tracing who starts after whom means scrolling between blocks and holding the chain in your head. docker compose alpha viz reads the same file and prints the graph instead.
+
+```bash
+docker compose alpha viz --image --ports --networks
+```
+
+The output is plain DOT, the format Graphviz has read since long before Compose existed. With Graphviz installed, docker compose alpha viz | dot -Tpng -o graph.png turns any Compose file into a picture in one line. Because it reads the same depends_on graph Compose itself uses to decide startup order, the picture can't drift from the actual behavior the way a hand-maintained diagram would.
+
+viz is the other command living under alpha alongside generate (Tip #88), and the same caveat applies: flag names and output can change release to release, no deprecation notice required. viz first landed in April 2023, generate in October 2024. Unlike watch, which spent a year under alpha before graduating, neither has moved yet, alpha status describes stability guarantees, not how long a command has been around.
+
+Full guide: lours.me/posts/compose-tip-090-alpha-viz/
+
+#Docker #DockerCompose #CLI #DevOps
+```
