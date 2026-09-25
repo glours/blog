@@ -437,3 +437,188 @@ Full guide: lours.me/posts/compose-tip-090-alpha-viz/
 
 #Docker #DockerCompose #CLI #DevOps
 ```
+
+---
+
+## Special publication — Friday, September 25, 2026
+
+Published alongside Tip #90, outside the regular tip slot. Announces the `docker/skills` open-source release and the two-week Docker Skills deep dive series starting Monday (no blog post exists yet to link to, so this points to the GitHub repo and docs instead).
+
+### Docker Skills open-source announcement
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker open-sourced docker/skills (v0.3.0): SKILL.md guides teaching AI agents pinned tags, health checks, non-root images, no baked-in credentials.
+
+11 skills, 4 product families.
+
+Deep dive series starts Monday.
+
+Repo: github.com/docker/skills
+Docs: docs.docker.com/ai/skills/
+
+#Docker #AI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 docker/skills is now open source
+
+I'm happy to share a project I've worked on recently: docker/skills, which Docker open-sourced this week (v0.3.0). I initiated it and remain one of its contributors.
+
+It's a set of SKILL.md guides that teach AI coding agents the Docker-specific rules a generic model has no reliable way to pull into a prompt on its own: pinned image tags, health checks that actually verify readiness, non-root users, and credentials that never touch an image layer.
+
+The repository ships 11 skills across 4 product families:
+
+• Dockerfile & Build: docker-project-foundations, docker-build-strategies
+• Docker Compose: docker-compose-patterns
+• Docker Sandboxes: docker-sandboxes-lifecycle, docker-sandboxes-network-credentials, plus two experimental skills
+• Docker Agent: docker-agent-config, docker-agent-run, docker-agent-deploy
+
+Plus one cross-product skill, docker-destructive-guardrails, that every other skill defers to before running an irreversible command.
+
+Each skill is a SKILL.md file following the Agent Skills specification: no entry point to load first, an agent scans every installed skill's description and pulls in whichever one matches the task at hand. Supported today: Claude Code, OpenAI Codex, Cursor, GitHub Copilot CLI, Gemini CLI, Google Antigravity, and OpenCode, plus a dedicated experimental installer for Docker Sandboxes' sbx CLI.
+
+Install with the cross-client skills CLI:
+
+npx skills add docker/skills
+
+Starting Monday, this blog runs a two-week deep dive series covering each product family in detail, sidecars for healthchecks on distroless images, BuildKit secret mounts, sandbox isolation, and more. First post: what's in the repo, which agents it supports, and how to install it.
+
+Repo: github.com/docker/skills
+Docs: docs.docker.com/ai/skills/
+
+#Docker #DockerCompose #AI #AIAgents #OpenSource #DevOps
+```
+
+---
+
+## Week 29: September 28 - October 2, 2026 - Docker Skills Deep Dive, Part 1/2
+
+No tips this week. Three-part series on the `docker/skills` repo, one post per product family covered.
+
+### Monday, September 28 - What Docker Skills is, who it's for, how to install it (Part 1)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Skills, Part 1
+
+AI agents write mediocre Dockerfiles: latest tags, no health checks, root left in place. docker/skills fixes that: 11 SKILL.md guides across Build, Compose, Sandboxes, Agent.
+
+npx skills add docker/skills
+
+lours.me/posts/docker-skills-part-1-overview/
+
+#Docker #AI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Skills, Part 1: What It Is, Who It's For, How to Install It
+
+AI coding agents write a lot of Dockerfiles and Compose files these days, and most of them are mediocre: latest tags, missing health checks, credentials baked into layers, root users left in place. docker/skills, open-sourced this week, gives a compatible agent the missing context: SKILL.md guides it loads automatically based on the task at hand, no entry point skill required.
+
+11 skills across 4 product families:
+
+• Dockerfile & Build: docker-project-foundations, docker-build-strategies
+• Docker Compose: docker-compose-patterns
+• Docker Sandboxes: docker-sandboxes-lifecycle, docker-sandboxes-network-credentials, plus two experimental skills
+• Docker Agent: docker-agent-config, docker-agent-run, docker-agent-deploy
+
+Plus docker-destructive-guardrails, the cross-product policy every other skill defers to before an irreversible command.
+
+Supported today: Claude Code, OpenAI Codex, Cursor, GitHub Copilot CLI, Gemini CLI, Google Antigravity, OpenCode, plus a dedicated sbx CLI installer for Docker Sandboxes.
+
+npx skills add docker/skills
+
+Part 1 of a series going deep on each product family. Part 2 (Wednesday) covers Dockerfile builds and project scaffolding.
+
+Full guide: lours.me/posts/docker-skills-part-1-overview/
+
+#Docker #DockerCompose #AI #AIAgents #OpenSource #DevOps
+```
+
+---
+
+### Wednesday, September 30 - docker-build-strategies and docker-project-foundations (Part 2)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Skills, Part 2
+
+Credentials passed through ARG end up in docker history. docker-build-strategies + docker-project-foundations fix that: BuildKit secrets, non-root images, project scaffolding.
+
+lours.me/posts/docker-skills-part-2-build-and-foundations/
+
+#Docker #Security
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Skills, Part 2: docker-build-strategies and docker-project-foundations
+
+A registry token passed through ARG or ENV never shows up in docker run. It's still sitting in the image's layer history, one docker history away from anyone who pulls it. That's the exact mistake docker-build-strategies is written to intercept.
+
+```dockerfile
+RUN --mount=type=secret,id=npmrc,target=/root/.npmrc,required=false \
+    npm ci --omit=dev
+```
+
+The secret is available only inside that RUN step, never written to a layer. The skill also covers:
+
+• Multi-stage builds: explicit stage names, COPY --from=build, COPY --link for cache reuse
+• Layer ordering: dependency manifests before source code, BuildKit cache mounts per package manager
+• Non-root users, down to a specific gotcha: --chown with COPY --link needs the numeric UID:GID, not a named user
+
+docker-project-foundations covers the earlier case, no Docker setup at all: always scaffold .dockerignore, Dockerfile, and compose.yaml together, and always define a database or cache as a Compose service instead of a host install.
+
+Part 3 (Friday) moves to Docker Compose service wiring.
+
+Full guide: lours.me/posts/docker-skills-part-2-build-and-foundations/
+
+#Docker #DockerCompose #Security #AI #DevOps
+```
+
+---
+
+### Friday, October 2 - docker-compose-patterns in depth (Part 3)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Skills, Part 3
+
+depends_on only guarantees a container started, not that it's ready. docker-compose-patterns fixes that with service_healthy, plus a sidecar pattern for images with no shell.
+
+lours.me/posts/docker-skills-part-3-compose-patterns/
+
+#Docker #DockerCompose
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Skills, Part 3: docker-compose-patterns in Depth
+
+depends_on only guarantees a container has started, not that whatever it's serving is ready. docker-compose-patterns closes that gap with condition: service_healthy, paired with a healthcheck.
+
+For distroless or hardened images with no shell, no curl, the skill's answer is a sidecar:
+
+```yaml
+api-health:
+  image: curlimages/curl:8
+  network_mode: "service:api"
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+```
+
+Also in the skill:
+
+• Naming and file conventions: compose.yaml, lowercase role-based service names, pinned image tags
+• Compose Watch mapped to action types: sync for source, rebuild for dependency manifests, sync+restart for config files
+• Destructive-command guardrails: docker compose down -v and rm -v need explicit confirmation before running, never as a side effect of "just cleaning up"
+
+This closes the Build and Compose half of the Docker Skills series. Week 2 goes into Docker Sandboxes and Docker Agent.
+
+Full guide: lours.me/posts/docker-skills-part-3-compose-patterns/
+
+#Docker #DockerCompose #AI #DevOps
+```

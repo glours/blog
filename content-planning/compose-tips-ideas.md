@@ -187,6 +187,19 @@ Dropped: `compose ps` honoring `psFormat` from the Docker CLI config — too nic
 - **Wed (#89)**: Capability dropping — `cap_drop`/`cap_add` in practice, beyond the general security options in tip #6 (Security)
 - **Fri (#90)**: `docker compose alpha viz` — Graphviz dependency graph of a Compose file (CLI/Advanced)
 
+### Week 29 (Sep 28 - Oct 2) - Docker Skills Deep Dive, Part 1/2 - IN PROGRESS
+No tips this week and next. `docker/skills` open-sourced this week (v0.3.0, released 2026-09-23) — a repo of `SKILL.md` guidance for AI coding agents across Dockerfile/build, Compose, Sandboxes, and Docker Agent. New "Docker Skills" Hugo category, no tip-number continuity (this spans several products, not just Compose). Content verified directly against the skill sources in `~/sources/skills` (not just the docs pages), so technical claims trace to actual `SKILL.md` files, not paraphrase.
+- **Mon**: Part 1 — What Docker Skills is, the 11 skills across 4 product families (Build, Compose, Sandboxes, Agent) plus the cross-product guardrails skill, which agents support it (Claude Code, Codex, Cursor, Copilot CLI, Gemini CLI, Antigravity, OpenCode, sbx), and how to install (`npx skills add docker/skills`, native plugin marketplaces, git clone) (Introduction)
+- **Wed**: Part 2 — `docker-build-strategies` and `docker-project-foundations` together: multi-stage builds, BuildKit secret/SSH mounts (never `ARG`/`ENV` for credentials), non-root users, and why project scaffolding always produces Dockerized dependencies instead of host installs (Build). Moved ahead of Compose so the series goes scaffold → build → wiring in the order a new project actually hits them.
+- **Fri**: Part 3 — `docker-compose-patterns` in depth: health-check sidecars for distroless/hardened images, `depends_on` + `service_healthy`, Compose Watch action types, destructive-command guardrails baked into the skill (Docker Compose)
+
+### Week 30 (Oct 5-9) - Docker Skills Deep Dive, Part 2/2 - PLANNED
+- **Mon**: Part 4 — Docker Sandboxes skills: `docker-sandboxes-lifecycle` (bind-mount vs `--clone` isolation), `docker-sandboxes-network-credentials` (proxy-injection egress policy), and a look at the two experimental skills (`docker-sandboxes-env`, `docker-sandboxes-kits`) (Sandboxes)
+- **Wed**: Part 5 — Docker Agent skills: `docker-agent-config` (agent.yaml), `docker-agent-run` (safety/approval modes), `docker-agent-deploy` (serving + OCI distribution + CI eval) (Agent)
+- **Fri**: Part 6 — `docker-destructive-guardrails`, the cross-product policy every other skill defers to for irreversible commands, and a wrap-up of the series (Cross-Product)
+
+Regular Compose tips resume Week 31.
+
 ---
 
 ## Future Topic Ideas
