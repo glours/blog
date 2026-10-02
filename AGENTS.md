@@ -203,7 +203,7 @@ AI agents should NOT:
 
 ### Social Media Templates (`content-planning/social-media-posts.md`)
 - Platform-specific posts (Bluesky & LinkedIn)
-- Bluesky: Concise, developer-focused (< 300 chars)
+- Bluesky: Concise, developer-focused, 300-grapheme hard limit enforced by the platform on the *entire* post (emoji header, body, the full link text since Bluesky never shortens it, and hashtags all count), not just the body text. Count the whole fenced block before finalizing a draft.
 - LinkedIn: Professional, detailed with context
 - Includes hashtag strategy and engagement tips
 

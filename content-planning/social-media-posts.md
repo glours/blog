@@ -622,3 +622,108 @@ Full guide: lours.me/posts/docker-skills-part-3-compose-patterns/
 
 #Docker #DockerCompose #AI #DevOps
 ```
+
+---
+
+## Week 30: October 5-9, 2026 - Docker Skills Deep Dive, Part 4-6 (Series Close)
+
+No tips this week. Closes the `docker/skills` repo series: Docker Sandboxes core, Docker Agent, then the cross-product destructive-guardrails skill, as committed to in Part 3's "What's next".
+
+### Monday, October 5 - Sandbox lifecycle, network policy, and credentials (Part 4)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Skills, Part 4
+
+sbx run claude . gives an agent a disposable microVM: its own filesystem, network, Docker daemon. docker-sandboxes-lifecycle and -network-credentials teach it to drive that safely, secrets included.
+
+lours.me/posts/docker-skills-part-4-sandboxes-core/
+
+#Docker #AI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Skills, Part 4: Sandbox Lifecycle, Network Policy, and Credentials
+
+One command, sbx run claude ., and an agent gets a disposable microVM: its own filesystem, network, and Docker daemon, instead of running loose on your laptop. docker-sandboxes-lifecycle and docker-sandboxes-network-credentials, the two skills this post covers, are what make that sandbox practical to drive day to day.
+
+A few mistakes a generic agent makes without them, and what the skill tells it instead:
+
+• sbx run claude (no path) mounts the current directory; sbx create claude (no path) mounts nothing. A generic agent can produce a create command that looks identical to a working run and silently stand up an empty sandbox.
+• Asked for an API key, the unguided move is a literal --env value, unmasked in the sandbox's environment and in sbx env plan's state file. The skill's rule: sbx secret import or sbx secret set, so the sandbox sees the key only on requests to domains its kit declares.
+• A sandbox's network is default-deny until sbx policy init runs, and deny always wins over allow for the same host, worth knowing before assuming --deny-network could widen what an org-level policy already narrows.
+
+Part 5 moves to Docker Agent. Part 6 closes the series with docker-destructive-guardrails.
+
+Full guide: lours.me/posts/docker-skills-part-4-sandboxes-core/
+
+#Docker #AI #AIAgents #Security #DevOps
+```
+
+### Wednesday, October 7 - Configuring, running, and deploying Docker Agent (Part 5)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Skills, Part 5
+
+An agent that only describes a plan instead of acting is usually missing a tool, not a smarter model: type: shell, type: todo in agent.yaml. docker-agent-config/run/deploy fix that, plus safety and sandboxing.
+
+lours.me/posts/docker-skills-part-5-agent/
+
+#Docker #AI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Skills, Part 5: Configuring, Running, and Deploying Docker Agent
+
+An agent that only describes a plan instead of executing it isn't a model problem, it's usually missing the one tool it needs to act (type: shell or type: todo in agent.yaml). docker-agent-config, docker-agent-run, and docker-agent-deploy, the three skills this post covers, take agent.yaml from authoring through production.
+
+A few mistakes a generic config/run/deploy makes, and what the skill corrects:
+
+• Asked to wire up a provider, the obvious next line is the API key, inline, in the YAML. The skill's rule: never hardcode it, credentials come from env vars or docker agent setup, and prefer dmr/<model> when the task must run offline.
+• --safety restricted, not autonomous, is the right default for unattended/CI runs: unreviewed tool calls fail closed instead of running unreviewed.
+• --sandbox isolates the agent in the same sbx microVM Part 4 covers, but sandboxes persist and get reused across runs, not a fresh VM every time, so stale state can carry forward silently.
+• docker agent eval forwards provider API keys into its containers automatically, but GITHUB_TOKEN isn't one of them and needs passing explicitly with -e.
+
+Part 6 (Friday) closes the series with docker-destructive-guardrails.
+
+Full guide: lours.me/posts/docker-skills-part-5-agent/
+
+#Docker #AIAgents #AI #DevOps #MCP
+```
+
+### Friday, October 9 - Destructive-command guardrails and series wrap-up (Part 6)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Skills, Part 6
+
+docker network rm -f and docker context rm -f share a flag name and do different things: one suppresses an error, the other forces removal in use. docker-destructive-guardrails exists for this. Series closer.
+
+lours.me/posts/docker-skills-part-6-guardrails/
+
+#Docker #AI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Skills, Part 6: Destructive-Command Guardrails and a Series Wrap-Up
+
+docker network rm -f and docker context rm -f share a flag name and do different things: on a network it only suppresses a "doesn't exist" error, on a context it genuinely forces removal even while in use. docker-destructive-guardrails, the cross-product skill this post covers, exists for exactly that kind of inconsistency.
+
+A few rules from this closing post:
+
+• Container cleanup gets a narrow Tier 1 exception: an already-stopped container, or one the agent created and started this session purely for testing, can be removed without asking first. Everything else, including any unscoped sweep, needs explicit confirmation.
+• The skill's whole model fits in one exchange: a generic agent asked to "clean things up" tends to just run docker system prune -a --volumes and report the result. The skill has it list options by risk instead and wait for an answer.
+• Some flags aren't even settled by their own --help text: docker rmi -f's override behavior on a multi-tag image is documented by convention, not confirmed, so the skill treats that gap itself as a reason to ask, not a reason to guess.
+
+This closes the Docker Skills series: 11 skills across Dockerfile & Build, Compose, Sandboxes, and Agent, docker-destructive-guardrails among them as the cross-product one.
+
+npx skills add docker/skills
+
+Full guide: lours.me/posts/docker-skills-part-6-guardrails/
+
+#Docker #AI #AIAgents #Security #DevOps
+```
