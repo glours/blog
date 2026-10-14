@@ -727,3 +727,164 @@ Full guide: lours.me/posts/docker-skills-part-6-guardrails/
 
 #Docker #AI #AIAgents #Security #DevOps
 ```
+
+---
+
+## Week 31: October 12-16, 2026 - Mixed Themes
+
+Regular Compose tips resume after the Docker Skills series, grounded in genuine `feat(...)` changes in Compose 5.6.0 plus one timeless advanced pattern.
+
+### Monday, October 12 - Providers now take part in the image phase (Tip #91)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #91
+
+A provider used to push to a registry or shell out to docker save by hand to get bytes to a remote runtime. Compose 5.6.0 lets it opt into the same image phase and request them directly.
+
+Guide: lours.me/posts/compose-tip-091-provider-image-distribution/
+
+#Docker #AI
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #91: Providers now take part in the image phase
+
+A provider managing containers on a remote or non-Docker runtime has always been able to declare build: or image: on its service, but getting the actual image bytes there was left entirely to the provider: push to a registry it can reach, or shell out to docker save/scp and hope it matches what Compose resolved.
+
+Compose 5.6.0 closes that gap. A provider opts in with a pull block in its metadata, even an empty one, and Compose folds it into up's image phase (after any build) and into docker compose pull:
+
+```bash
+my-provider compose --project-name myapp pull \
+  --image=myapp-worker --source=local --policy=missing \
+  --digest=sha256:abc123... --created=2026-10-01T12:00:00Z \
+  worker
+```
+
+--source is the authority Compose already computed (local vs registry). --policy is missing on up, always on pull. When the provider needs the bytes, it asks over stdout, and Compose answers on stdin with a JSON control line, then the chunked tar body, the same format docker image save produces.
+
+One provider's pull failing doesn't cancel the others: provider pulls run independently, not under fail-fast.
+
+Full guide: lours.me/posts/compose-tip-091-provider-image-distribution/
+
+#Docker #DockerCompose #AI #DevOps
+```
+
+---
+
+### Wednesday, October 14 - Compose now tells you when an attribute does nothing (Tip #92)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #92
+
+deploy.update_config, credential_spec, ports[].mode: host: valid against the schema, Swarm-only in practice. Compose 5.6.0 now warns the moment it loads one.
+
+Guide: lours.me/posts/compose-tip-092-unsupported-attribute-warnings/
+
+#Docker #Configuration
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #92: Compose now tells you when an attribute does nothing
+
+deploy.update_config, credential_spec, ports[].mode: host: every one of these is valid against the compose-spec schema, and none of them has ever done anything to a plain docker compose up. They're Swarm-only. Before Compose 5.6.0, a file carrying any of them loaded without complaint, and whatever behavior you expected from reading the spec just never showed up.
+
+Since 5.6.0, loading one of these gets a warning:
+
+```
+$ docker compose up
+WARN[0000] service "web": credential_spec: credential_spec is only supported when running Windows containers under Swarm
+WARN[0000] service "web": deploy.update_config: deploy.update_config only applies to rolling updates in Swarm mode
+```
+
+It's built as an allowlist, not a denylist: Compose walks every attribute path the schema declares and flags anything not on the list of what this runtime actually honors. An attribute the spec adds tomorrow gets a generic warning the moment it shows up, instead of silently doing nothing until someone notices.
+
+The warning doesn't block anything, it only tells you a field is dead weight for the runtime you're using.
+
+Full guide: lours.me/posts/compose-tip-092-unsupported-attribute-warnings/
+
+#Docker #DockerCompose #Configuration #DevOps
+```
+
+---
+
+### Friday, October 16 - The ambassador pattern for environment-specific dependencies (Tip #93)
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tip #93
+
+An app connects to localhost:6379, but Redis never lives in the same place twice across dev/staging/prod. The ambassador pattern puts that difference in one disposable proxy, not app code.
+
+Guide: lours.me/posts/compose-tip-093-ambassador-pattern/
+
+#Docker #Advanced
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tip #93: The ambassador pattern for environment-specific dependencies
+
+An app connects to Redis at localhost:6379 in every environment, but Redis never actually lives at the same place twice: a local container in dev, a managed instance in staging, a different one in prod. The ambassador pattern puts that difference in one disposable container instead of scattered if ENV == prod branches in app config:
+
+```yaml
+services:
+  app:
+    build: .
+    network_mode: "service:db-ambassador"
+    environment:
+      - REDIS_HOST=localhost
+      - REDIS_PORT=6379
+
+  db-ambassador:
+    image: haproxy:3.0
+    configs:
+      - source: ambassador_cfg
+        target: /usr/local/etc/haproxy/haproxy.cfg
+```
+
+network_mode: "service:db-ambassador" puts app in the ambassador's network namespace, so app sees localhost:6379 as if Redis were running right next to it. The real target comes from a .env file through Compose's own variable substitution, not app code, so switching environments is a value change, not a redeploy of different app logic.
+
+It's a specific flavor of the sidecar pattern (Tip #47): the one job an ambassador does is stand in for a remote dependency on the local network. One gotcha: network_mode: service:x shares the entire namespace, not just one port, so a container can only have one ambassador at a time.
+
+Full guide: lours.me/posts/compose-tip-093-ambassador-pattern/
+
+#Docker #DockerCompose #Advanced #Networking
+```
+
+---
+
+## Special publication — Friday, October 16, 2026
+
+Posted alongside Tip #93 to announce a 3-week pause for time off. Series resumes Monday, November 9.
+
+### Taking a short break
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Docker Compose Tips — taking a short break
+
+Tip #93 is the last one before a 3-week pause for some time off.
+
+Back Monday, November 9.
+
+Archive: lours.me/posts/
+
+#Docker #DockerCompose
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose Tips — taking a short break
+
+Tip #93 closes this run of the series. Time for a few weeks off.
+
+The series resumes Monday, November 9. Until then, the full archive is at lours.me/posts/, three tips a week since January, plus the recent Docker Skills deep dive covering the docker/skills repo in depth.
+
+Thanks for reading, sharing, and pushing back on the tips. See you in November.
+
+#Docker #DockerCompose #DevOps
+```
