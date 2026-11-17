@@ -888,3 +888,55 @@ Thanks for reading, sharing, and pushing back on the tips. See you in November.
 
 #Docker #DockerCompose #DevOps
 ```
+
+---
+
+## Special publication: Tuesday, November 17, 2026
+
+Published outside the regular Docker Compose Tips schedule. Announces scheduled jobs in Docker Compose v5.8.0 and Docker Engine 29.10.0, both released this week.
+
+### Docker Compose v5.8.0: Scheduled Jobs
+
+**🦋 Bluesky:**
+```
+🐳 🐙 Compose v5.8.0: scheduled jobs
+
+A top-level jobs: element. Declare a nightly pg_dump next to your database and the engine runs it on a cron schedule. No host cron, no crond container.
+
+Experimental, needs Engine 29.10.
+
+Guide: lours.me/posts/compose-scheduled-jobs/
+
+#Docker #DockerCompose
+```
+
+**💼 LinkedIn:**
+```
+🐳 🐙 Docker Compose v5.8.0: Scheduled Jobs
+
+Compose v5.8.0 adds a top-level `jobs:` element: containers that run to completion, on demand or on a cron schedule, declared next to the services they work with. A nightly database backup no longer needs host cron or a container running crond (trimmed example):
+
+```yaml
+jobs:
+  backup:
+    image: postgres:17
+    depends_on:
+      db:
+        condition: service_healthy
+    command: pg_dump --format=custom --file=/backups/shop.dump postgres
+    triggers:
+      schedule:
+        - cron: "0 3 * * *"
+          timezone: Europe/Paris
+```
+
+docker compose up registers the job with the Docker Engine, which fires it on its own clock: the schedule keeps running after the docker compose command exits, and also when the project targets a remote engine. docker compose run backup runs it right now, waits for db to be healthy, streams the logs and returns the job's exit code.
+
+Two things worth knowing before relying on it for backups. A pipe hides failures: pg_dump | gzip exits with the status of gzip, so a dump taken with the database stopped still ended as succeeded. Writing with --file turns it into a failed run. And a succeeded scheduled run leaves no container, so the dump goes to a volume, while the container of a failed run is kept for docker logs.
+
+Jobs are experimental, and scheduling needs Docker Engine 29.10 with the jobs extension enabled (off by default). A docker job command group to list runs is in review in docker/cli, and its UX is not final.
+
+Full guide: lours.me/posts/compose-scheduled-jobs/
+
+#Docker #DockerCompose #DevOps #PostgreSQL
+```
